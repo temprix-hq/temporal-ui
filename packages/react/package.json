@@ -67,7 +67,7 @@
 		"postpublish": "node ../../scripts/restore-protocols.mjs"
 	},
 	"dependencies": {
-		"@ark-ui/react": "5.38.1",
+		"@ark-ui/react": "5.39.1",
 		"@tanstack/react-table": "8.21.3",
 		"@temporal-ui/core": "workspace:*"
 	},
