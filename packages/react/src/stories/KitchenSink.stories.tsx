@@ -73,7 +73,6 @@ function KitchenSinkPage() {
 					<Button variant="secondary">Secondary</Button>
 					<Button variant="outline">Outline</Button>
 					<Button variant="ghost">Ghost</Button>
-					<Button variant="link">Link</Button>
 					<Button variant="destructive">Destructive</Button>
 				</Stack>
 			</Section>
@@ -180,7 +179,7 @@ function KitchenSinkPage() {
 
 			<Section title="Slider">
 				<div className="max-w-sm">
-					<Slider label="Intensity" defaultValue={[40]} min={0} max={100} />
+					<Slider label="Intensity" min={0} max={100} />
 				</div>
 			</Section>
 
