@@ -41,7 +41,14 @@ function ThemeFrame({ theme, children }: { theme: "light" | "dark"; children: Re
 	return (
 		<div
 			className={`${theme} min-h-screen bg-background text-foreground p-6`}
-			style={{ colorScheme: theme } as CSSProperties}
+			style={
+				{
+					colorScheme: theme,
+					backgroundColor: "var(--background)",
+					color: "var(--foreground)",
+					minHeight: "100vh",
+				} as CSSProperties
+			}
 		>
 			{children}
 		</div>

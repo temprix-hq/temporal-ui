@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import { BoldIcon, ChevronDownIcon, ItalicIcon, UnderlineIcon } from "lucide-solid";
-import type { JSX } from "solid-js";
+import { createEffect, onCleanup, type JSX } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import {
 	Accordion,
@@ -38,10 +38,28 @@ const fruitCollection = createListCollection({
 });
 
 function ThemeFrame(props: { theme: "light" | "dark"; children: JSX.Element }) {
+	createEffect(() => {
+		const root = document.documentElement;
+		root.classList.remove("light", "dark");
+		root.classList.add(props.theme);
+		onCleanup(() => {
+			root.classList.remove("light", "dark");
+		});
+	});
+
 	return (
 		<div
-			class={`${props.theme} min-h-screen bg-background text-foreground p-6`}
-			style={{ "color-scheme": props.theme }}
+			classList={{
+				dark: props.theme === "dark",
+				light: props.theme === "light",
+			}}
+			style={{
+				"color-scheme": props.theme,
+				"background-color": "var(--background)",
+				color: "var(--foreground)",
+				"min-height": "100vh",
+				padding: "1.5rem",
+			}}
 		>
 			{props.children}
 		</div>
