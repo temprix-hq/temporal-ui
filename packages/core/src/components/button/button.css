@@ -79,9 +79,12 @@
 	/* Primary (default) */
 	[data-component="button"]:not([data-variant]),
 	[data-component="button"][data-variant="primary"] {
-		@apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90;
+		@apply bg-primary text-primary-foreground shadow-xs;
+		&:hover {
+			@apply bg-primary-hover;
+		}
 		&[aria-pressed="true"] {
-			@apply bg-primary/90;
+			@apply bg-primary-pressed;
 		}
 		.loading {
 			@apply border-b-primary-foreground border-r-primary-foreground;
@@ -91,9 +94,11 @@
 	/* Secondary */
 	[data-component="button"][data-variant="secondary"] {
 		@apply bg-secondary text-secondary-foreground shadow-xs;
-		&:hover,
+		&:hover {
+			@apply bg-secondary-hover;
+		}
 		&[aria-pressed="true"] {
-			@apply bg-secondary/80;
+			@apply bg-secondary-pressed;
 		}
 		.loading {
 			@apply border-b-secondary-foreground border-r-secondary-foreground;
@@ -103,9 +108,11 @@
 	/* Outline */
 	[data-component="button"][data-variant="outline"] {
 		@apply border bg-background shadow-xs dark:bg-input/30 dark:border-input;
-		&:hover,
+		&:hover {
+			@apply bg-accent text-accent-foreground;
+		}
 		&[aria-pressed="true"] {
-			@apply bg-accent text-accent-foreground dark:bg-accent/50;
+			@apply bg-accent-pressed text-accent-foreground;
 		}
 		.loading {
 			@apply border-b-secondary-foreground border-r-secondary-foreground;
@@ -114,9 +121,11 @@
 
 	/* Ghost */
 	[data-component="button"][data-variant="ghost"] {
-		&:hover,
+		&:hover {
+			@apply bg-accent text-accent-foreground;
+		}
 		&[aria-pressed="true"] {
-			@apply bg-accent text-accent-foreground dark:bg-accent/50;
+			@apply bg-accent-pressed text-accent-foreground;
 		}
 		.loading {
 			@apply border-b-accent-foreground border-r-accent-foreground;
@@ -128,7 +137,7 @@
 		@apply text-primary underline-offset-4;
 		&:hover,
 		&[aria-pressed="true"] {
-			@apply hover:underline;
+			@apply underline;
 		}
 		.loading {
 			@apply border-b-primary border-r-primary;
@@ -137,10 +146,12 @@
 
 	/* Destructive */
 	[data-component="button"][data-variant="destructive"] {
-		@apply bg-destructive text-white shadow-xs focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60;
-		&:hover,
+		@apply bg-destructive text-white shadow-xs focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40;
+		&:hover {
+			@apply bg-destructive-hover;
+		}
 		&[aria-pressed="true"] {
-			@apply bg-destructive/90 dark:bg-destructive/50;
+			@apply bg-destructive-pressed;
 		}
 		.loading {
 			@apply border-b-white border-r-white;

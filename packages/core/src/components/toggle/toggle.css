@@ -1,10 +1,10 @@
 @layer components {
 	[data-scope="toggle"] {
 		&[data-part="root"] {
-			@apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-card hover:bg-muted hover:text-muted-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
+			@apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-card hover:bg-accent hover:text-accent-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
 
 			&[data-state="on"] {
-				@apply bg-muted-foreground/15 text-accent-foreground;
+				@apply bg-primary text-primary-foreground hover:bg-primary-hover;
 			}
 
 			&[data-disabled] {
@@ -36,10 +36,10 @@
 		}
 
 		&[data-part="item"] {
-			@apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all h-9 min-w-9 px-2.5 bg-card hover:bg-muted hover:text-muted-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
+			@apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all h-9 min-w-9 px-2.5 bg-card hover:bg-accent hover:text-accent-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
 
 			&[data-state="on"] {
-				@apply bg-muted-foreground/15 text-accent-foreground;
+				@apply bg-primary text-primary-foreground hover:bg-primary-hover;
 			}
 
 			&[data-disabled] {
@@ -49,12 +49,12 @@
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"] {
-		@apply bg-card;
+		@apply bg-muted dark:bg-background;
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
 		[data-scope="toggle-group"][data-part="item"] {
-		@apply rounded-sm border-0 shadow-none hover:bg-muted/60 hover:text-muted-foreground;
+		@apply rounded-sm border-0 shadow-none bg-transparent hover:bg-accent hover:text-accent-foreground;
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]:not(
@@ -66,7 +66,7 @@
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
 		[data-scope="toggle-group"][data-part="item"][data-state="on"] {
-		@apply bg-muted-foreground/15 text-accent-foreground shadow-xs hover:bg-secondary/80;
+		@apply bg-card text-accent-foreground shadow-xs hover:bg-secondary-hover dark:bg-popover dark:hover:bg-accent;
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]

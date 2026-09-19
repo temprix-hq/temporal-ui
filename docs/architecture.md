@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: August 13, 2026
+Last updated: September 19, 2026
 
 Temporal UI is a published design system. Shared contracts and CSS live in core; React and Solid packages are thin, framework-specific bindings over those contracts, mostly wrapping [Ark UI](https://ark-ui.com/).
 
@@ -96,8 +96,11 @@ Storybook: React on port **6006**, Solid on port **6007**.
 
 - Plain CSS + Tailwind v4 (`@apply`, `@theme`, `@layer components`). No CSS-in-JS.
 - Selectors are attribute-based, e.g. `[data-component="button"][data-variant="primary"]`.
-- Light/dark tokens live in `packages/core/src/css/base.css`. Dark mode is `.dark` (see `@custom-variant` in that file).
+- Light/dark tokens live in `packages/core/src/css/base.css`. Dark mode is `.dark`; light can be forced with `.light` (mirrors `:root`, so a nested light subtree wins even if an ancestor is `.dark` — CSS variables inherit).
+- Hover and pressed colors use `--hover-mix` / `--pressed-mix` (black in light, white in dark) via `color-mix`, not canvas-opacity (`/90`). Hover darkens in light and lightens in dark; pressed is one step further; selected/`data-state="on"` is stronger than hover with full-contrast text.
+- Ghost, outline, and card-like triggers use `--accent` at full strength (do not wash out dark hover with `/50`).
 - Consumers import `@temporal-ui/react/styles.css` or `@temporal-ui/solid/styles.css` (or core `styles.css`).
+- Kitchen-sink stories (`packages/react/src/stories/KitchenSink.stories.tsx`, `packages/solid/src/stories/KitchenSink.stories.tsx`) lock light and dark independently of the Storybook toolbar.
 
 ## Tooling map
 

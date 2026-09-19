@@ -23,10 +23,10 @@
 		}
 		&[data-hover]:not([data-readonly]) {
 			&:not([data-state="checked"]) {
-				@apply bg-primary/20 dark:bg-primary/20;
+				@apply bg-accent;
 			}
 			&[data-state="checked"] {
-				@apply bg-primary/80 dark:bg-primary/80;
+				@apply bg-primary-hover;
 			}
 		}
 	}

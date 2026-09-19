@@ -8,13 +8,13 @@
 	}
 	.badge,
 	.badge-primary {
-		@apply border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90;
+		@apply border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary-hover;
 	}
 	.badge-secondary {
-		@apply border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90;
+		@apply border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary-hover;
 	}
 	.badge-destructive {
-		@apply border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60;
+		@apply border-transparent bg-destructive text-white [a&]:hover:bg-destructive-hover focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40;
 	}
 	.badge-outline {
 		@apply border-input text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground;
