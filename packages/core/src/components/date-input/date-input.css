@@ -1,6 +1,6 @@
 @layer components {
 	[data-scope="date-input"][data-part="trigger"] {
-		@apply ps-3 pe-3 w-fit flex items-center relative bg-card dark:bg-input/30 border border-input rounded-md aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] disabled:cursor-not-allowed transition-colors h-9 text-left data-[placeholder=true]:text-muted-foreground hover:bg-accent hover:text-accent-foreground text-sm data-with-start-section:ps-9 data-with-end-section:pe-9;
+		@apply ps-3 pe-3 w-fit flex items-center relative bg-transparent dark:bg-input/30 border border-input rounded-md aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] disabled:cursor-not-allowed transition-colors h-9 text-left data-[placeholder=true]:text-muted-foreground hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50 text-sm data-with-start-section:ps-9 data-with-end-section:pe-9;
 	}
 
 	[data-component="date-input"][data-slot="start-section"],
@@ -34,7 +34,7 @@
 
 	[data-scope="date-input"][data-part="prev-trigger"],
 	[data-scope="date-input"][data-part="next-trigger"] {
-		@apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground has-[>svg]:px-3 aria-disabled:opacity-50 p-0 select-none size-8;
+		@apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 has-[>svg]:px-3 aria-disabled:opacity-50 p-0 select-none size-8;
 	}
 
 	[data-scope="date-input"][data-part="table-head"],
@@ -51,7 +51,7 @@
 	}
 
 	[data-scope="date-input"][data-part="table-cell-trigger"] {
-		@apply items-center justify-center whitespace-nowrap rounded-md text-sm transition-all [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 flex aspect-square size-auto w-full flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70;
+		@apply items-center justify-center whitespace-nowrap rounded-md text-sm transition-all [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70;
 
 		&[data-focus] {
 			@apply border-ring ring-ring/50 ring-[3px];

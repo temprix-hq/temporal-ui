@@ -13,7 +13,7 @@
 			}
 		}
 		&[data-part="item-control"] {
-			@apply border-input text-primary bg-card dark:bg-input/30 aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow,background-color] outline-none relative;
+			@apply border-input text-primary bg-transparent dark:bg-input/30 aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow,background-color] outline-none relative;
 			&[data-focus-visible] {
 				@apply border-ring ring-ring/50 ring-[3px];
 			}

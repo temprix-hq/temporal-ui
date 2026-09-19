@@ -1,6 +1,6 @@
 @layer components {
 	[data-scope="color-input"][data-part="trigger"] {
-		@apply relative bg-card dark:bg-input/30 border border-input rounded-md aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] disabled:cursor-not-allowed transition-colors h-9 text-left text-sm hover:bg-accent hover:text-accent-foreground;
+		@apply relative bg-transparent dark:bg-input/30 border border-input rounded-md aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] disabled:cursor-not-allowed transition-colors h-9 text-left text-sm hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50;
 	}
 
 	[data-scope="color-input"][data-part="swatch"] {

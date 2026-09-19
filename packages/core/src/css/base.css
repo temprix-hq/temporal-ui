@@ -1,33 +1,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Default (neutral) theme tokens from shadcn/ui:
+   https://ui.shadcn.com/docs/theming
+   Deviations: `.light` mirrors `:root` for nested theme forcing; scrollbar and
+   sidebar width tokens are Temporal layout, not shadcn colors. */
 :root,
 .light {
 	--radius: 0.625rem;
-	--background: oklch(0.975 0 0); /* ↓ off-white: canvas recedes so cards can float above it */
+	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
-	--card: oklch(1 0 0); /* pure white: elevated above the background */
+	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);
-	--popover: oklch(1 0 0); /* same as card — popovers float at card level */
+	--popover: oklch(1 0 0);
 	--popover-foreground: oklch(0.145 0 0);
 	--primary: oklch(0.205 0 0);
 	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.96 0 0); /* ↓ subtle fills on canvas (chips, tags, etc.) */
+	--secondary: oklch(0.97 0 0);
 	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.96 0 0); /* ↓ matches secondary */
+	--muted: oklch(0.97 0 0);
 	--muted-foreground: oklch(0.556 0 0);
-	--accent: oklch(0.92 0 0); /* hover/selected fills — a visible step below muted */
+	--accent: oklch(0.97 0 0);
 	--accent-foreground: oklch(0.205 0 0);
 	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.908 0 0); /* ↓ slightly darker to maintain contrast against off-white bg */
-	--input: oklch(0.908 0 0); /* ↓ same reasoning */
+	--border: oklch(0.922 0 0);
+	--input: oklch(0.922 0 0);
 	--ring: oklch(0.708 0 0);
-	--sidebar: oklch(0.955 0 0); /* ↓ noticeably off-white: sidebar recedes behind canvas */
+	--chart-1: oklch(0.646 0.222 41.116);
+	--chart-2: oklch(0.6 0.118 184.704);
+	--chart-3: oklch(0.398 0.07 227.392);
+	--chart-4: oklch(0.828 0.189 84.429);
+	--chart-5: oklch(0.769 0.188 70.08);
+	--sidebar: oklch(0.985 0 0);
 	--sidebar-foreground: oklch(0.145 0 0);
 	--sidebar-primary: oklch(0.205 0 0);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.935 0 0); /* ↓ hover in sidebar — darkens, does not lift to canvas */
+	--sidebar-accent: oklch(0.97 0 0);
 	--sidebar-accent-foreground: oklch(0.205 0 0);
-	--sidebar-border: oklch(0.908 0 0); /* matches --border */
+	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
 	--sidebar-width: 16rem;
 	--sidebar-width-icon: 3rem;
@@ -36,24 +45,14 @@
 	--scrollbar-thumb: rgba(0, 0, 0, 0.3);
 	--scrollbar-width: 6px;
 	--scrollbar-radius: 6px;
-	/* Mix toward black so hover/press darken in light (not canvas-opacity, which lightens). */
-	--hover-mix: oklch(0 0 0);
-	--pressed-mix: oklch(0 0 0);
-	--primary-hover: color-mix(in oklch, var(--primary) 88%, var(--hover-mix));
-	--primary-pressed: color-mix(in oklch, var(--primary) 76%, var(--pressed-mix));
-	--secondary-hover: color-mix(in oklch, var(--secondary) 85%, var(--hover-mix));
-	--secondary-pressed: color-mix(in oklch, var(--secondary) 72%, var(--pressed-mix));
-	--destructive-hover: color-mix(in oklch, var(--destructive) 88%, var(--hover-mix));
-	--destructive-pressed: color-mix(in oklch, var(--destructive) 76%, var(--pressed-mix));
-	--accent-pressed: color-mix(in oklch, var(--accent) 80%, var(--pressed-mix));
 }
 
 .dark {
-	--background: oklch(0.185 0 0); /* ↑ lifted: main canvas sits above sidebar */
+	--background: oklch(0.145 0 0);
 	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.225 0 0); /* ↑ lifted: cards elevated above canvas */
+	--card: oklch(0.205 0 0);
 	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.269 0 0);
+	--popover: oklch(0.205 0 0);
 	--popover-foreground: oklch(0.985 0 0);
 	--primary: oklch(0.922 0 0);
 	--primary-foreground: oklch(0.205 0 0);
@@ -61,26 +60,26 @@
 	--secondary-foreground: oklch(0.985 0 0);
 	--muted: oklch(0.269 0 0);
 	--muted-foreground: oklch(0.708 0 0);
-	--accent: oklch(0.42 0 0); /* hover/selected lift — clearly above muted/card */
+	--accent: oklch(0.269 0 0);
 	--accent-foreground: oklch(0.985 0 0);
 	--destructive: oklch(0.704 0.191 22.216);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
 	--ring: oklch(0.556 0 0);
-	--sidebar: oklch(0.13 0 0); /* ↓ darkest surface: sidebar recedes */
+	--chart-1: oklch(0.488 0.243 264.376);
+	--chart-2: oklch(0.696 0.17 162.48);
+	--chart-3: oklch(0.769 0.188 70.08);
+	--chart-4: oklch(0.627 0.265 303.9);
+	--chart-5: oklch(0.645 0.246 16.439);
+	--sidebar: oklch(0.205 0 0);
 	--sidebar-foreground: oklch(0.985 0 0);
 	--sidebar-primary: oklch(0.488 0.243 264.376);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.19 0 0); /* hover/active in sidebar: lifts to canvas level */
+	--sidebar-accent: oklch(0.269 0 0);
 	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(
-		1 0 0 / 8%
-	); /* slightly softer: dark sidebar needs less border contrast */
-	--sidebar-ring: oklch(0.439 0 0);
+	--sidebar-border: oklch(1 0 0 / 10%);
+	--sidebar-ring: oklch(0.556 0 0);
 	--scrollbar-thumb: rgba(255, 255, 255, 0.3);
-	/* Mix toward white so hover/press lighten in dark (not canvas-opacity, which darkens). */
-	--hover-mix: oklch(1 0 0);
-	--pressed-mix: oklch(1 0 0);
 }
 
 @layer base {

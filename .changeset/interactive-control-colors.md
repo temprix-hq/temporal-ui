@@ -4,4 +4,4 @@
 "@temporal-ui/solid": patch
 ---
 
-Improve interactive hover, pressed, and selected colors in light and dark themes.
+Align color tokens and interactive hover recipes with the shadcn/ui default (neutral) theme.

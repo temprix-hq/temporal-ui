@@ -79,12 +79,9 @@
 	/* Primary (default) */
 	[data-component="button"]:not([data-variant]),
 	[data-component="button"][data-variant="primary"] {
-		@apply bg-primary text-primary-foreground shadow-xs;
-		&:hover {
-			@apply bg-primary-hover;
-		}
+		@apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90;
 		&[aria-pressed="true"] {
-			@apply bg-primary-pressed;
+			@apply bg-primary/90;
 		}
 		.loading {
 			@apply border-b-primary-foreground border-r-primary-foreground;
@@ -93,12 +90,9 @@
 
 	/* Secondary */
 	[data-component="button"][data-variant="secondary"] {
-		@apply bg-secondary text-secondary-foreground shadow-xs;
-		&:hover {
-			@apply bg-secondary-hover;
-		}
+		@apply bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80;
 		&[aria-pressed="true"] {
-			@apply bg-secondary-pressed;
+			@apply bg-secondary/80;
 		}
 		.loading {
 			@apply border-b-secondary-foreground border-r-secondary-foreground;
@@ -107,12 +101,9 @@
 
 	/* Outline */
 	[data-component="button"][data-variant="outline"] {
-		@apply border bg-background shadow-xs dark:bg-input/30 dark:border-input;
-		&:hover {
-			@apply bg-accent text-accent-foreground;
-		}
+		@apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50;
 		&[aria-pressed="true"] {
-			@apply bg-accent-pressed text-accent-foreground;
+			@apply bg-accent text-accent-foreground dark:bg-input/50;
 		}
 		.loading {
 			@apply border-b-secondary-foreground border-r-secondary-foreground;
@@ -121,11 +112,9 @@
 
 	/* Ghost */
 	[data-component="button"][data-variant="ghost"] {
-		&:hover {
-			@apply bg-accent text-accent-foreground;
-		}
+		@apply hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50;
 		&[aria-pressed="true"] {
-			@apply bg-accent-pressed text-accent-foreground;
+			@apply bg-accent text-accent-foreground dark:bg-accent/50;
 		}
 		.loading {
 			@apply border-b-accent-foreground border-r-accent-foreground;
@@ -146,12 +135,9 @@
 
 	/* Destructive */
 	[data-component="button"][data-variant="destructive"] {
-		@apply bg-destructive text-white shadow-xs focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40;
-		&:hover {
-			@apply bg-destructive-hover;
-		}
+		@apply bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40;
 		&[aria-pressed="true"] {
-			@apply bg-destructive-pressed;
+			@apply bg-destructive/90;
 		}
 		.loading {
 			@apply border-b-white border-r-white;

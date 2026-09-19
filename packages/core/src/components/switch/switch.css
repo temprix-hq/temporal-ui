@@ -26,7 +26,7 @@
 				@apply bg-accent;
 			}
 			&[data-state="checked"] {
-				@apply bg-primary-hover;
+				@apply bg-primary/90;
 			}
 		}
 	}
