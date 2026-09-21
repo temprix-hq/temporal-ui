@@ -80,7 +80,7 @@
 		"@storybook/addon-themes": "10.6.0",
 		"@storybook/addon-vitest": "10.6.0",
 		"@tailwindcss/vite": "4.3.3",
-		"@testing-library/jest-dom": "6.9.1",
+		"@testing-library/jest-dom": "7.0.1",
 		"@testing-library/user-event": "14.6.7",
 		"happy-dom": "20.14.3",
 		"lucide-solid": "1.45.0",
