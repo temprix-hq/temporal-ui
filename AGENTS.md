@@ -4,6 +4,34 @@ This file is the primary runbook for AI agents working in this repository. Claud
 
 Repo docs under `docs/` are part of the deliverable, not optional commentary. Update them in the same change when you alter the behavior or structure they describe.
 
+## Work protocol (every change)
+
+Protocol: v1 (standalone variant)
+
+This applies to every change to a tracked file, with or without a ticket.
+
+1. **Branch first.** Branch from the up-to-date default branch and never commit
+   to it. Name the branch `{agent}/{ticket-id}-{slug}`, or `{agent}/{slug}` with
+   no ticket. Keep a harness-assigned name only if the harness forbids renaming,
+   and say so in the PR body.
+2. **Run checks before each commit.** Run the repo's formatter, linter and
+   typecheck together, and re-run them after any later edit.
+3. **Update docs in the same change.** Follow the repo's AGENTS.md
+   Documentation section, locally and in the cloud.
+4. **Push and open a ready PR.** Never a draft. Put the ticket ID in the title
+   if there is one. After each later push, add a one-line PR comment.
+5. **Report back.** Give the PR URL, branch, checks run and result, docs
+   touched, and open questions. On a local run, stop before push and PR only if
+   the coordinator said `pr: none`.
+6. **After the PR merges**, switch to the default branch, sync it, and delete
+   the local branch.
+
+No ticket is needed for typos, small fixes, chores, CI tweaks or dependency
+work. For a feature-sized or product-visible change without a ticket, suggest
+one in your report. Never create it yourself.
+
+In this repo, step 2 is the trio under **Before committing** and step 3 is the **Documentation** section. A change that affects consumers of the published packages also needs a changeset (see **Versioning and releases**).
+
 ## Overview
 
 - **Bun monorepo** (Turbo workspaces) publishing a framework-agnostic design system: `@temporal-ui/core`, `@temporal-ui/react`, `@temporal-ui/solid`
@@ -15,7 +43,6 @@ Repo docs under `docs/` are part of the deliverable, not optional commentary. Up
 - **Architecture**: `docs/architecture.md` — packages, component layering, catalog, tooling
 - **Code generation**: `docs/code-generation.md` — follow when adding or changing components
 - **Testing strategy**: `docs/testing-strategy.md` — follow when writing Vitest tests
-- **Linear issues**: `docs/linear-issues.md` — workflow when given a `TPX-*` issue
 - **npm release setup**: `docs/npm-release-setup.md` — trusted publishing bootstrap (one-time); agents use the release workflow below for publishing
 
 ## Package manager
@@ -121,10 +148,6 @@ Lefthook already runs format, `lint:fix`, and `typecheck` on pre-commit.
 - **Changesets** for versioning published packages
 - **Ark UI MCP** (`.cursor/mcp.json`) when wrapping or inspecting Ark UI APIs — use `react` or `solid` as the framework
 
-## Linear issues
-
-When given a Linear issue ID (e.g. `TPX-412`), follow `docs/linear-issues.md`.
-
 ## Cursor Cloud
 
 No local services to start. After `bun install`:
@@ -132,8 +155,6 @@ No local services to start. After `bun install`:
 1. `bun run test` for unit tests
 2. `bun run build && bun run typecheck` before claiming types are clean
 3. `bun run react` / `bun run solid` only when you need to inspect UI in Storybook
-
-Push and open a PR only when `docs/linear-issues.md` says to (cloud Linux environment, after the work is done).
 
 ## Common mistakes
 
