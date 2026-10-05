@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import { ColorInput } from "./ColorInput";
 
 const meta = {
@@ -40,4 +41,12 @@ export const ReadOnly: Story = {
 		...CompleteExample.args,
 		readOnly: true,
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<ColorInput label="Favorite color" defaultValue="#2563eb" />
+		</ThemePanels>
+	),
 };

@@ -18,6 +18,7 @@ import {
 	SidebarInset,
 } from "./SidebarComponent";
 import { SidebarMenu, SidebarMenuItem, SidebarMenuLink } from "./SidebarMenu";
+import { ThemePanels } from "../../stories/theme-panels";
 import { SidebarProvider } from "./SidebarProvider";
 import { SidebarRail } from "./SidebarRail";
 import { SidebarTrigger } from "./SidebarTrigger";
@@ -158,5 +159,32 @@ export const FlushCollapsed: Story = {
 				</SidebarInset>
 			</SidebarProvider>
 		</Box>
+	),
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div
+				data-component="sidebar"
+				className="bg-sidebar text-sidebar-foreground w-60 rounded-lg p-2"
+			>
+				<SidebarMenu>
+					<SidebarGroupLabel className="px-2">Navigation</SidebarGroupLabel>
+					<SidebarMenuItem>
+						<SidebarMenuLink href="#states">
+							<Home />
+							<span>Default item</span>
+						</SidebarMenuLink>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<SidebarMenuLink href="#states" isActive>
+							<Home />
+							<span>Active item</span>
+						</SidebarMenuLink>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</div>
+		</ThemePanels>
 	),
 };

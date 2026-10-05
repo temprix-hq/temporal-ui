@@ -2,6 +2,7 @@
 
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { fn } from "storybook/test";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Checkbox } from "./Checkbox";
 
 const meta = {
@@ -58,4 +59,20 @@ export const Indeterminate: Story = {
 		...Default.args,
 		checked: "indeterminate",
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<div class="flex flex-col gap-3">
+					<Checkbox label="Unchecked" />
+					<Checkbox label="Checked" defaultChecked />
+					<Checkbox label="Indeterminate" checked="indeterminate" />
+					<Checkbox label="Disabled" disabled />
+					<Checkbox label="Disabled checked" defaultChecked disabled />
+				</div>
+			)}
+		</ThemePanels>
+	),
 };

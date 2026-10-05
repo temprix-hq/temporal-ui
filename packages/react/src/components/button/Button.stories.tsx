@@ -2,6 +2,7 @@
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Button } from "./Button";
 
 const meta = {
@@ -140,4 +141,26 @@ export const Icon: Story = {
 			</svg>
 		),
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div className="flex flex-wrap items-center gap-2">
+				<Button>Primary</Button>
+				<Button aria-pressed="true">Primary pressed</Button>
+				<Button variant="secondary">Secondary</Button>
+				<Button variant="secondary" aria-pressed="true">
+					Secondary pressed
+				</Button>
+				<Button variant="outline">Outline</Button>
+				<Button variant="ghost">Ghost</Button>
+				<Button variant="ghost" aria-pressed="true">
+					Ghost pressed
+				</Button>
+				<Button variant="destructive">Destructive</Button>
+				<Button disabled>Disabled</Button>
+			</div>
+		</ThemePanels>
+	),
 };

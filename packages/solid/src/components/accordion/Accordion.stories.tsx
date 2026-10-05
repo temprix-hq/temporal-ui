@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import {
 	Accordion,
 	AccordionItem,
@@ -103,4 +104,10 @@ export const Controlled: Story = {
 		const [value, setValue] = createSignal<string[]>(["item-1"]);
 		return <AccordionDemo {...props} value={value()} onValueChange={setValue} />;
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>{() => <AccordionDemo variant="boxed" defaultValue={["item-1"]} />}</ThemePanels>
+	),
 };

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CalendarIcon } from "lucide-react";
 import React from "react";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Calendar, DateInput, type DateInputProps } from ".";
 
 const rangePresets = {
@@ -89,4 +90,15 @@ export const CalendarRange: Story = {
 		outsideDaySelectable: true,
 	},
 	render: (args) => <Calendar {...args} />,
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div className="flex flex-col gap-4">
+				<DateInput label="Date" placeholder="Pick a date" fixedWeeks />
+				<Calendar className="w-[250px]" fixedWeeks />
+			</div>
+		</ThemePanels>
+	),
 };

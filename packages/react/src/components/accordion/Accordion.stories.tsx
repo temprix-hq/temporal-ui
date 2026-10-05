@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import {
 	Accordion,
 	AccordionItem,
@@ -99,4 +100,12 @@ export const Controlled: Story = {
 		const [value, setValue] = useState<string[]>(["item-1"]);
 		return <AccordionDemo {...props} value={value} onValueChange={setValue} />;
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<AccordionDemo variant="boxed" defaultValue={["item-1"]} />
+		</ThemePanels>
+	),
 };

@@ -1,8 +1,12 @@
 import { Banana } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createListCollection } from ".";
+<<<<<<< HEAD
 import { Button } from "../button";
 import { Popover } from "../popover";
+=======
+import { ThemePanels } from "../../stories/theme-panels";
+>>>>>>> d2bedbb (TPX-1228: add Solid theme decorator and side-by-side light/dark state stories)
 import { Select } from "./Select";
 
 const meta = {
@@ -55,6 +59,28 @@ export const Default: Story = {
 		label: "Fruits",
 		portal: true,
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<Select
+					className="min-w-[250px]"
+					collection={createListCollection({
+						items: [
+							{ value: "apple", label: "Apple" },
+							{ value: "banana", label: "Banana" },
+							{ value: "cherry", label: "Cherry" },
+						],
+					})}
+					placeholder="Select a fruit"
+					label="Fruits"
+					portal={false}
+				/>
+			)}
+		</ThemePanels>
+	),
 };
 
 export const MaxDropdownHeight: Story = {

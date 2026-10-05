@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Table } from "./Table";
 
 const meta = {
@@ -49,5 +50,30 @@ export const Default: Story = {
 				</tr>
 			</tfoot>
 		</Table>
+	),
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<Table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Role</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Liam Johnson</td>
+						<td>Admin</td>
+					</tr>
+					<tr data-state="selected">
+						<td>Olivia Smith</td>
+						<td>Editor</td>
+					</tr>
+				</tbody>
+			</Table>
+		</ThemePanels>
 	),
 };

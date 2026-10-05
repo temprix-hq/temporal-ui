@@ -3,6 +3,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Banana } from "lucide-react";
 import { createListCollection, type SelectItem } from ".";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Button } from "../button";
 import { Popover } from "../popover";
 import { Select } from "./Select";
@@ -58,6 +59,21 @@ export const Default: Story = {
 		label: "Fruits",
 		portal: true,
 	},
+};
+
+export const States: Story = {
+	args: {
+		className: "min-w-[250px]",
+		placeholder: "Select a fruit",
+		collection,
+		label: "Fruits",
+		portal: false,
+	},
+	render: (props) => (
+		<ThemePanels>
+			<Select {...props} />
+		</ThemePanels>
+	),
 };
 
 export const MaxDropdownHeight: Story = {

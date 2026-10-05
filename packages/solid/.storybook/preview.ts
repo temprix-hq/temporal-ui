@@ -1,10 +1,20 @@
 import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
+import { withThemeByClassName } from "@storybook/addon-themes";
 import { definePreview } from "storybook-solidjs-vite";
 import "../src/styles.css";
 
 export default definePreview({
 	addons: [addonDocs(), addonA11y()],
+	decorators: [
+		withThemeByClassName({
+			themes: {
+				light: "light",
+				dark: "dark",
+			},
+			defaultTheme: "light",
+		}),
+	],
 	parameters: {
 		// automatically create action args for all props that start with 'on'
 		actions: {

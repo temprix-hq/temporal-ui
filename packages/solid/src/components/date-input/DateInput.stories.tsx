@@ -2,6 +2,7 @@ import type { DatePicker } from "@ark-ui/solid/date-picker";
 import { CalendarIcon } from "lucide-solid";
 import { createSignal, type ComponentProps } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Calendar, DateInput, type DateInputProps } from ".";
 
 const rangePresets = {
@@ -90,4 +91,17 @@ export const CalendarRange: Story = {
 		outsideDaySelectable: true,
 	},
 	render: (args: DateInputProps & ComponentProps<typeof DatePicker.Root>) => <Calendar {...args} />,
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<div class="flex flex-col gap-4">
+					<DateInput label="Date" placeholder="Pick a date" fixedWeeks />
+					<Calendar className="w-[250px]" fixedWeeks />
+				</div>
+			)}
+		</ThemePanels>
+	),
 };
