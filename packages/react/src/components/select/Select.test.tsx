@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createListCollection, Select, type SelectItem } from ".";
 
 const collection = createListCollection<SelectItem<unknown>>({
@@ -148,4 +148,142 @@ describe("Select", () => {
 		expect(screen.getByTestId("sel7--trigger")).toHaveAttribute("id", "custom-trigger");
 		expect(screen.getByTestId("sel7--content")).toHaveAttribute("id", "custom-content");
 	});
+
+	describe("positioner z-index", () => {
+		const cleanups: Array<() => void> = [];
+
+		afterEach(() => {
+			for (const cleanup of cleanups) {
+				cleanup();
+			}
+			cleanups.length = 0;
+		});
+
+		it.each([
+			{ portal: false, zIndex: "50", testId: "z-std" },
+			{ portal: true, zIndex: "50", testId: "z-std-portal" },
+			{ portal: false, zIndex: "200", testId: "z-override" },
+		])(
+			"standard placement follows content z-index $zIndex (portal=$portal)",
+			async ({ portal, zIndex, testId }) => {
+				cleanups.push(installContentZIndex(zIndex));
+				const user = userEvent.setup();
+				render(
+					<Select
+						testId={testId}
+						label="Pick"
+						collection={collection}
+						placeholder="Choose"
+						portal={portal}
+					/>,
+				);
+
+				await user.click(screen.getByTestId(`${testId}--trigger`));
+
+				const positioner = await screen.findByTestId(`${testId}--positioner`);
+				await waitFor(() => {
+					const content = screen.getByTestId(`${testId}--content`);
+					expect(getComputedStyle(content).zIndex).toBe(zIndex);
+					expect(positioner.style.getPropertyValue("--z-index")).toBe(zIndex);
+					expect(positioner.firstElementChild).toBe(content);
+				});
+			},
+		);
+
+		it.each([
+			{ portal: false, zIndex: "50", testId: "z-align" },
+			{ portal: true, zIndex: "50", testId: "z-align-portal" },
+			{ portal: true, zIndex: "200", testId: "z-override-align" },
+		])(
+			"aligned placement follows content z-index $zIndex (portal=$portal)",
+			async ({ portal, zIndex, testId }) => {
+				cleanups.push(installContentZIndex(zIndex));
+				cleanups.push(stubAlignGeometry());
+				const user = userEvent.setup();
+				render(
+					<Select
+						testId={testId}
+						label="Pick"
+						collection={collection}
+						placeholder="Choose"
+						portal={portal}
+						alignItemWithTrigger
+						defaultValue={["a"]}
+					/>,
+				);
+
+				await user.click(screen.getByTestId(`${testId}--trigger`));
+
+				const positioner = await screen.findByTestId(`${testId}--positioner`);
+				await waitFor(() => {
+					const content = screen.getByTestId(`${testId}--content`);
+					const popup = positioner.querySelector("[data-align-item-with-trigger-active]");
+					expect(getComputedStyle(content).zIndex).toBe(zIndex);
+					expect(positioner.style.getPropertyValue("--z-index")).toBe(zIndex);
+					expect(popup).toBeInstanceOf(HTMLElement);
+					expect(getComputedStyle(popup as HTMLElement).zIndex).toBe(zIndex);
+				});
+			},
+		);
+	});
 });
+
+function installContentZIndex(zIndex: string) {
+	const style = document.createElement("style");
+	style.textContent = `[data-scope="select"][data-part="content"] { z-index: ${zIndex}; }`;
+	document.head.append(style);
+	return () => style.remove();
+}
+
+function stubAlignGeometry() {
+	const rect = (top: number, height: number, left = 0, width = 200): DOMRect =>
+		({
+			top,
+			left,
+			bottom: top + height,
+			right: left + width,
+			width,
+			height,
+			x: left,
+			y: top,
+			toJSON: () => ({}),
+		}) as DOMRect;
+
+	const spy = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
+		this: HTMLElement,
+	) {
+		const part = this.getAttribute("data-part");
+		if (part === "control" || part === "trigger") {
+			return rect(100, 36, 0, 250);
+		}
+		if (part === "value-text") {
+			return rect(110, 16, 12, 80);
+		}
+		if (part === "item-text") {
+			return rect(150, 16, 12, 80);
+		}
+		if (part === "item") {
+			return rect(140, 36, 0, 220);
+		}
+		if (part === "positioner" || part === "content") {
+			return rect(108, 200, 0, 220);
+		}
+		return rect(0, 0, 0, 0);
+	});
+
+	const viewport = document.documentElement;
+	const previousHeight = Object.getOwnPropertyDescriptor(viewport, "clientHeight");
+	const previousWidth = Object.getOwnPropertyDescriptor(viewport, "clientWidth");
+	Object.defineProperty(viewport, "clientHeight", { configurable: true, value: 800 });
+	Object.defineProperty(viewport, "clientWidth", { configurable: true, value: 1024 });
+
+	return () => {
+		spy.mockRestore();
+		if (previousHeight) {
+			Object.defineProperty(viewport, "clientHeight", previousHeight);
+		}
+		if (previousWidth) {
+			Object.defineProperty(viewport, "clientWidth", previousWidth);
+		}
+	};
+}

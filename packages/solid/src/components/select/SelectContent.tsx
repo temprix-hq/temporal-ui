@@ -45,6 +45,9 @@ export function SelectContent(_props: SelectContentProps) {
 		}),
 	);
 
+	const contentStyle = () =>
+		showAligned() ? alignedStyles()?.content : { "max-height": `${props.maxHeight}px` };
+
 	return (
 		<ArkSelect.Positioner
 			id={props.selectIds?.positioner}
@@ -54,62 +57,89 @@ export function SelectContent(_props: SelectContentProps) {
 			data-align-item-with-trigger-pending={isAlignPending() ? "" : undefined}
 			style={showAligned() ? alignedStyles()?.positioner : undefined}
 		>
-			<div
-				data-align-item-with-trigger-active={showAligned() ? "" : undefined}
-				style={showAligned() ? alignedStyles()?.popup : { display: "contents" }}
+			{/* Zag copies the positioner's first child's computed z-index onto `--z-index`.
+			    The wrapper exists only while aligned so standard placement reads Select.Content. */}
+			<Show
+				when={showAligned()}
+				fallback={
+					<SelectContentBody
+						tid={props.tid}
+						classes={props.classes}
+						selectIds={props.selectIds}
+						style={contentStyle()}
+					/>
+				}
 			>
-				<ArkSelect.Content
-					id={props.selectIds?.content}
-					class={props.classes?.content}
-					data-testid={props.tid("--content")}
-					style={
-						showAligned() ? alignedStyles()?.content : { "max-height": `${props.maxHeight}px` }
-					}
-				>
-					<div data-component="select" data-slot="list" data-testid={props.tid("--content-list")}>
-						<For each={context().collection.group()}>
-							{([type, group]) => (
-								<ArkSelect.ItemGroup
-									class={props.classes?.itemGroup}
-									data-testid={props.tid("--item-group")}
-								>
-									<Show when={type}>
-										<ArkSelect.ItemGroupLabel
-											class={props.classes?.itemGroupLabel}
-											data-testid={props.tid("--item-group-label")}
-										>
-											{type}
-										</ArkSelect.ItemGroupLabel>
-									</Show>
-									<For each={group}>
-										{(item) => (
-											<ArkSelect.Item
-												class={props.classes?.item}
-												data-testid={props.tid("--item")}
-												item={item}
-											>
-												<ArkSelect.ItemIndicator
-													class={props.classes?.itemIndicator}
-													data-testid={props.tid("--item-indicator")}
-												>
-													<CheckIcon />
-												</ArkSelect.ItemIndicator>
-												<Show when={item.icon}>{item.icon}</Show>
-												<ArkSelect.ItemText
-													class={props.classes?.itemText}
-													data-testid={props.tid("--item-text")}
-												>
-													{item.label}
-												</ArkSelect.ItemText>
-											</ArkSelect.Item>
-										)}
-									</For>
-								</ArkSelect.ItemGroup>
-							)}
-						</For>
-					</div>
-				</ArkSelect.Content>
-			</div>
+				<div data-align-item-with-trigger-active="" style={alignedStyles()?.popup}>
+					<SelectContentBody
+						tid={props.tid}
+						classes={props.classes}
+						selectIds={props.selectIds}
+						style={contentStyle()}
+					/>
+				</div>
+			</Show>
 		</ArkSelect.Positioner>
+	);
+}
+
+function SelectContentBody(bodyProps: {
+	tid: SelectContentProps["tid"];
+	classes: SelectContentProps["classes"];
+	selectIds: SelectContentProps["selectIds"];
+	style?: Record<string, string>;
+}) {
+	const context = useSelectContext();
+
+	return (
+		<ArkSelect.Content
+			id={bodyProps.selectIds?.content}
+			class={bodyProps.classes?.content}
+			data-testid={bodyProps.tid("--content")}
+			style={bodyProps.style}
+		>
+			<div data-component="select" data-slot="list" data-testid={bodyProps.tid("--content-list")}>
+				<For each={context().collection.group()}>
+					{([type, group]) => (
+						<ArkSelect.ItemGroup
+							class={bodyProps.classes?.itemGroup}
+							data-testid={bodyProps.tid("--item-group")}
+						>
+							<Show when={type}>
+								<ArkSelect.ItemGroupLabel
+									class={bodyProps.classes?.itemGroupLabel}
+									data-testid={bodyProps.tid("--item-group-label")}
+								>
+									{type}
+								</ArkSelect.ItemGroupLabel>
+							</Show>
+							<For each={group}>
+								{(item) => (
+									<ArkSelect.Item
+										class={bodyProps.classes?.item}
+										data-testid={bodyProps.tid("--item")}
+										item={item}
+									>
+										<ArkSelect.ItemIndicator
+											class={bodyProps.classes?.itemIndicator}
+											data-testid={bodyProps.tid("--item-indicator")}
+										>
+											<CheckIcon />
+										</ArkSelect.ItemIndicator>
+										<Show when={item.icon}>{item.icon}</Show>
+										<ArkSelect.ItemText
+											class={bodyProps.classes?.itemText}
+											data-testid={bodyProps.tid("--item-text")}
+										>
+											{item.label}
+										</ArkSelect.ItemText>
+									</ArkSelect.Item>
+								)}
+							</For>
+						</ArkSelect.ItemGroup>
+					)}
+				</For>
+			</div>
+		</ArkSelect.Content>
 	);
 }

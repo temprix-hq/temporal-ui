@@ -22,19 +22,24 @@ function mockRect(top: number, height = 36, left = 0, width = 200): DOMRect {
 	} as DOMRect;
 }
 
+const computedStyleMocks = new Map<HTMLElement, Partial<CSSStyleDeclaration>>();
+
 function mockComputedStyle(
 	element: HTMLElement,
 	styles: Partial<CSSStyleDeclaration> & Record<string, string>,
 ) {
+	computedStyleMocks.set(element, styles);
 	vi.spyOn(window, "getComputedStyle").mockImplementation((target) => {
-		if (target === element) {
-			return styles as CSSStyleDeclaration;
+		const matched = computedStyleMocks.get(target as HTMLElement);
+		if (matched) {
+			return matched as CSSStyleDeclaration;
 		}
 		return {
 			borderBottomWidth: "0",
 			marginTop: "10",
 			marginBottom: "10",
 			minHeight: "100",
+			zIndex: "auto",
 		} as CSSStyleDeclaration;
 	});
 }
@@ -46,6 +51,7 @@ function createAlignFixture(opts?: {
 	positionerTop?: number;
 	scrollHeight?: number;
 	viewportWidth?: number;
+	contentZIndex?: string;
 }) {
 	const triggerTop = opts?.triggerTop ?? 100;
 	const valueTextTop = opts?.valueTextTop ?? triggerTop + 10;
@@ -96,9 +102,14 @@ function createAlignFixture(opts?: {
 		marginTop: "10",
 		marginBottom: "10",
 		minHeight: "100",
+		zIndex: "7",
 	});
 	mockComputedStyle(contentEl, {
 		borderBottomWidth: "1",
+		borderLeftWidth: "0",
+		borderRightWidth: "0",
+		borderTopWidth: "0",
+		zIndex: opts?.contentZIndex ?? "50",
 	});
 
 	return {
@@ -113,6 +124,7 @@ function createAlignFixture(opts?: {
 
 describe("computeAlignItemWithTrigger", () => {
 	afterEach(() => {
+		computedStyleMocks.clear();
 		vi.restoreAllMocks();
 	});
 
@@ -163,6 +175,7 @@ describe("computeAlignItemWithTrigger", () => {
 		expect(result.styles.popup.position).toBe("fixed");
 		expect(result.styles.popup.transform).toBe("none");
 		expect(result.styles.popup.width).toBe("250px");
+		expect(result.styles.popup.zIndex).toBe("50");
 		expect(result.styles.positioner.position).toBe("static");
 		expect(result.styles.content.maxHeight).toBe("100%");
 		expect(result.styles.scrollTop).toBeGreaterThanOrEqual(0);
@@ -235,6 +248,40 @@ describe("computeAlignItemWithTrigger", () => {
 		// Control spans 0..250, popup left is clamped to 5 -> width must still
 		// reach the control's right edge when possible (250 - (-40) = 290).
 		expect(result.styles.popup.width).toBe("290px");
+	});
+
+	it("uses the content z-index for the aligned popup", () => {
+		Object.defineProperty(document.documentElement, "clientHeight", {
+			configurable: true,
+			value: 800,
+		});
+
+		const fixture = createAlignFixture({ contentZIndex: "200" });
+		const result = computeAlignItemWithTrigger(fixture);
+
+		expect(result.status).toBe("aligned");
+		if (result.status !== "aligned") {
+			return;
+		}
+
+		expect(result.styles.popup.zIndex).toBe("200");
+	});
+
+	it("falls back to 50 when the content z-index is auto", () => {
+		Object.defineProperty(document.documentElement, "clientHeight", {
+			configurable: true,
+			value: 800,
+		});
+
+		const fixture = createAlignFixture({ contentZIndex: "auto" });
+		const result = computeAlignItemWithTrigger(fixture);
+
+		expect(result.status).toBe("aligned");
+		if (result.status !== "aligned") {
+			return;
+		}
+
+		expect(result.styles.popup.zIndex).toBe("50");
 	});
 
 	it("queries the checked item element", () => {
