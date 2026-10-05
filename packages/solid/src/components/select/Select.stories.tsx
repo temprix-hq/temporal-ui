@@ -1,6 +1,8 @@
 import { Banana } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createListCollection } from ".";
+import { Button } from "../button";
+import { Popover } from "../popover";
 import { Select } from "./Select";
 
 const meta = {
@@ -109,6 +111,29 @@ export const AlignItemWithTriggerLongList: Story = {
 	render: (args: Story["args"]) => (
 		<div class="flex min-h-screen items-center justify-center p-8">
 			<Select {...args} />
+		</div>
+	),
+};
+
+export const InsidePopover: Story = {
+	args: {
+		className: "min-w-[250px]",
+		placeholder: "None",
+		collection,
+		label: "Group Members",
+		portal: true,
+		defaultOpen: true,
+	},
+	render: (args: Story["args"]) => (
+		<div class="relative min-h-[480px] p-8">
+			<div class="pointer-events-none absolute top-28 right-8 left-8 z-10 h-48 rounded-md border border-dashed bg-muted/80" />
+			<Popover
+				defaultOpen
+				title="View options"
+				trigger={(props) => <Button {...props}>View options</Button>}
+			>
+				<Select {...args} />
+			</Popover>
 		</div>
 	),
 };

@@ -3,6 +3,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Banana } from "lucide-react";
 import { createListCollection, type SelectItem } from ".";
+import { Button } from "../button";
+import { Popover } from "../popover";
 import { Select } from "./Select";
 
 const meta = {
@@ -127,6 +129,25 @@ export const LargeDataset: Story = {
 		});
 		return <Select {...args} collection={collection} />;
 	},
+};
+
+export const InsidePopover: Story = {
+	args: {
+		className: "min-w-[250px]",
+		placeholder: "None",
+		collection,
+		label: "Group Members",
+		portal: true,
+		defaultOpen: true,
+	},
+	render: (args) => (
+		<div className="relative min-h-[480px] p-8">
+			<div className="pointer-events-none absolute top-28 right-8 left-8 z-10 h-48 rounded-md border border-dashed bg-muted/80" />
+			<Popover defaultOpen title="View options" trigger={<Button>View options</Button>}>
+				<Select {...args} />
+			</Popover>
+		</div>
+	),
 };
 
 export const LargeDatasetWithGroups: Story = {

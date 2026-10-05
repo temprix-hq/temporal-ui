@@ -179,7 +179,9 @@ export function computeAlignItemWithTrigger(
 		transform: "none",
 		top: "auto",
 		bottom: "auto",
-		zIndex: positionerStyles.zIndex === "auto" ? "50" : positionerStyles.zIndex,
+		// Stack with the content element. "50" matches the default content rule
+		// only when that element itself resolves to auto.
+		zIndex: contentStyles.zIndex === "auto" ? "50" : contentStyles.zIndex,
 	};
 
 	let contentScrollTop = scrollTop;
