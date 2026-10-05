@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: August 13, 2026
+Last updated: October 5, 2026
 
 Temporal UI is a published design system. Shared contracts and CSS live in core; React and Solid packages are thin, framework-specific bindings over those contracts, mostly wrapping [Ark UI](https://ark-ui.com/).
 
@@ -94,10 +94,35 @@ Storybook: React on port **6006**, Solid on port **6007**.
 
 ## Styling
 
-- Plain CSS + Tailwind v4 (`@apply`, `@theme`, `@layer components`). No CSS-in-JS.
+- Plain CSS + Tailwind v4 (`@apply`, `@theme inline`, `@layer components`). No CSS-in-JS.
 - Selectors are attribute-based, e.g. `[data-component="button"][data-variant="primary"]`.
 - Light/dark tokens live in `packages/core/src/css/base.css`. Dark mode is `.dark` (see `@custom-variant` in that file).
 - Consumers import `@temporal-ui/react/styles.css` or `@temporal-ui/solid/styles.css` (or core `styles.css`).
+
+### Interaction states
+
+Hover, pressed and selected colors follow one directional rule instead of per-component
+recipes (no alpha fades like `/80` or `/90` on an element's own fill):
+
+1. **Filled elements** hover by mixing their own background toward their own foreground
+   token, staying opaque (`primary-hover`, `secondary-hover`, `card-hover`, …).
+2. **Transparent elements** hover with a translucent foreground overlay (`bg-hover`).
+3. **Pressed** (`:active`) is the same recipe, one step further (`bg-pressed`, `-pressed` tokens).
+4. **Selected + hover** stacks the overlay on the resting fill (`background-image:
+linear-gradient(var(--hover-overlay), var(--hover-overlay))`) instead of replacing it,
+   so hover never weakens selection.
+
+Neutrals therefore darken in light and lighten in dark on any surface; primary moves
+toward `primary-foreground`. Step sizes live in `--state-hover` / `--state-pressed`
+(base.css, per theme). The overlay tokens `--hover-overlay` / `--pressed-overlay` and the
+`--trigger-hover` / `--outline-hover` recipes are redefined per theme in base.css, so raw
+`var()` references in component CSS resolve correctly under a nested `.dark` wrapper.
+
+`@theme` must stay `@theme inline`: plain `@theme` resolves color mappings like
+`--color-card: var(--card)` at `:root`, so nested `.dark` wrappers keep light colors.
+The `@theme inline` mappings (`--color-hover`, `--color-primary-hover`, …) are inlined
+into utilities at the point of use; do not reference the emitted `--color-*` variables
+from raw CSS — use the base.css tokens instead.
 
 ## Tooling map
 

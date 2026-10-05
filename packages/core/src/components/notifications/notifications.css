@@ -65,7 +65,7 @@
 			/* Keeps the resting fill; hover stacks the foreground overlay on top
 			   so the step stays away from the toast surface in both themes. */
 			&:hover {
-				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+				background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
 			}
 		}
 	}

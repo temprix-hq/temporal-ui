@@ -1,12 +1,9 @@
 import { Banana } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createListCollection } from ".";
-<<<<<<< HEAD
+import { ThemePanels } from "../../stories/theme-panels";
 import { Button } from "../button";
 import { Popover } from "../popover";
-=======
-import { ThemePanels } from "../../stories/theme-panels";
->>>>>>> d2bedbb (TPX-1228: add Solid theme decorator and side-by-side light/dark state stories)
 import { Select } from "./Select";
 
 const meta = {

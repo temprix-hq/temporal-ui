@@ -120,7 +120,7 @@
 			   fill instead of replacing it, so hover never weakens selection. */
 			&[data-active="true"]:hover {
 				background-color: var(--sidebar-accent);
-				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+				background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
 			}
 
 			&[data-variant="default"] {
@@ -192,7 +192,7 @@
 
 			&[data-active="true"]:hover {
 				background-color: var(--sidebar-accent);
-				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+				background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
 			}
 			@apply data-[size=sm]:text-xs data-[size=md]:text-sm;
 			@apply group-data-[collapsible=icon]:hidden;

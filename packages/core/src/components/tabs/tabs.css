@@ -34,7 +34,7 @@
 			}
 
 			&[data-selected]:hover {
-				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+				background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
 			}
 		}
 	}
