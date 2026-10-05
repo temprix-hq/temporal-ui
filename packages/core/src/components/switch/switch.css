@@ -23,16 +23,24 @@
 		}
 		&[data-hover]:not([data-readonly]) {
 			&:not([data-state="checked"]) {
-				@apply bg-primary/20 dark:bg-primary/20;
+				@apply bg-[color-mix(in_oklch,var(--input),var(--foreground)_var(--state-hover))] dark:bg-input/50;
 			}
 			&[data-state="checked"] {
-				@apply bg-primary/80 dark:bg-primary/80;
+				@apply bg-primary-hover;
+			}
+		}
+		&:active:not([data-readonly]) {
+			&:not([data-state="checked"]) {
+				@apply bg-[color-mix(in_oklch,var(--input),var(--foreground)_var(--state-pressed))];
+			}
+			&[data-state="checked"] {
+				@apply bg-primary-pressed;
 			}
 		}
 	}
 
 	[data-scope="switch"][data-part="thumb"] {
-		@apply block rounded-full bg-background shadow-xs transition-transform;
+		@apply block rounded-full bg-background dark:bg-popover shadow-xs transition-transform;
 	}
 
 	/* Small */

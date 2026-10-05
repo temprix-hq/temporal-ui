@@ -31,6 +31,10 @@
 	--sidebar-width: 16rem;
 	--sidebar-width-icon: 3rem;
 	--sidebar-mobile-width: 18rem;
+	--state-hover: 6%;
+	--state-pressed: 10%;
+	--trigger-hover: color-mix(in oklch, var(--card), var(--foreground) 4%);
+	--outline-hover: color-mix(in oklch, var(--background), var(--foreground) var(--state-hover));
 	--scrollbar-track: transparent;
 	--scrollbar-thumb: rgba(0, 0, 0, 0.3);
 	--scrollbar-width: 6px;
@@ -66,6 +70,10 @@
 		1 0 0 / 8%
 	); /* slightly softer: dark sidebar needs less border contrast */
 	--sidebar-ring: oklch(0.439 0 0);
+	--state-hover: 5%;
+	--state-pressed: 9%;
+	--trigger-hover: color-mix(in oklch, var(--input) 50%, transparent);
+	--outline-hover: color-mix(in oklch, var(--input) 50%, transparent);
 	--scrollbar-thumb: rgba(255, 255, 255, 0.3);
 }
 

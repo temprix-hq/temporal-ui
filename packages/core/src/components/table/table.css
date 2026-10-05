@@ -20,7 +20,18 @@
 			}
 
 			tr {
-				@apply hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors;
+				@apply data-[state=selected]:bg-muted border-b transition-colors;
+
+				&:hover {
+					background-color: var(--color-hover);
+				}
+
+				/* Selected + hover stacks the foreground overlay on the resting
+				   fill instead of replacing it, so hover never weakens selection. */
+				&[data-state="selected"]:hover {
+					background-color: var(--muted);
+					background-image: linear-gradient(var(--color-hover), var(--color-hover));
+				}
 			}
 
 			th {

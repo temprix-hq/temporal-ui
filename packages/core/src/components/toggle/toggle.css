@@ -1,10 +1,27 @@
 @layer components {
 	[data-scope="toggle"] {
 		&[data-part="root"] {
-			@apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-card hover:bg-muted hover:text-muted-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
+			@apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-card border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
 
+			&:hover {
+				@apply bg-hover;
+			}
+			&:active {
+				@apply bg-pressed;
+			}
 			&[data-state="on"] {
 				@apply bg-muted-foreground/15 text-accent-foreground;
+			}
+
+			/* Selected + hover stacks the foreground overlay on the resting
+			   fill instead of replacing it, so hover never weakens selection. */
+			&[data-state="on"]:hover {
+				@apply bg-muted-foreground/15;
+				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+			}
+			&[data-state="on"]:active {
+				@apply bg-muted-foreground/15;
+				background-image: linear-gradient(var(--color-pressed), var(--color-pressed));
 			}
 
 			&[data-disabled] {
@@ -36,10 +53,24 @@
 		}
 
 		&[data-part="item"] {
-			@apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all h-9 min-w-9 px-2.5 bg-card hover:bg-muted hover:text-muted-foreground border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
+			@apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all h-9 min-w-9 px-2.5 bg-card border border-input shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none;
 
+			&:hover {
+				@apply bg-hover;
+			}
+			&:active {
+				@apply bg-pressed;
+			}
 			&[data-state="on"] {
 				@apply bg-muted-foreground/15 text-accent-foreground;
+			}
+			&[data-state="on"]:hover {
+				@apply bg-muted-foreground/15;
+				background-image: linear-gradient(var(--color-hover), var(--color-hover));
+			}
+			&[data-state="on"]:active {
+				@apply bg-muted-foreground/15;
+				background-image: linear-gradient(var(--color-pressed), var(--color-pressed));
 			}
 
 			&[data-disabled] {
@@ -54,7 +85,7 @@
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
 		[data-scope="toggle-group"][data-part="item"] {
-		@apply rounded-sm border-0 shadow-none hover:bg-muted/60 hover:text-muted-foreground;
+		@apply rounded-sm border-0 shadow-none hover:bg-hover active:bg-pressed;
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]:not(
@@ -66,7 +97,19 @@
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
 		[data-scope="toggle-group"][data-part="item"][data-state="on"] {
-		@apply bg-muted-foreground/15 text-accent-foreground shadow-xs hover:bg-secondary/80;
+		@apply bg-muted-foreground/15 text-accent-foreground shadow-xs;
+	}
+
+	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
+		[data-scope="toggle-group"][data-part="item"][data-state="on"]:hover {
+		@apply bg-muted-foreground/15;
+		background-image: linear-gradient(var(--color-hover), var(--color-hover));
+	}
+
+	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
+		[data-scope="toggle-group"][data-part="item"][data-state="on"]:active {
+		@apply bg-muted-foreground/15;
+		background-image: linear-gradient(var(--color-pressed), var(--color-pressed));
 	}
 
 	[data-scope="toggle-group"][data-part="root"][data-variant="segmented"]
