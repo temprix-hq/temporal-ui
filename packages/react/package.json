@@ -1,6 +1,6 @@
 {
 	"name": "@temporal-ui/react",
-	"version": "0.10.2",
+	"version": "1.0.0",
 	"description": "React bindings for Temporal UI components",
 	"bugs": {
 		"url": "https://github.com/temprix-hq/temporal-ui/issues"
