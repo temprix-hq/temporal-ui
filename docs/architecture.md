@@ -110,7 +110,7 @@ recipes:
 2. **Transparent elements** hover with a translucent foreground overlay (`bg-hover`).
 3. **Pressed** (`:active`) is the same recipe, one step further (`bg-pressed`, `-pressed` tokens).
 4. **Selected + hover** stacks the overlay on the resting fill (`background-image:
-   linear-gradient(var(--hover-overlay), var(--hover-overlay))`) instead of replacing it,
+linear-gradient(var(--hover-overlay), var(--hover-overlay))`) instead of replacing it,
    so hover never weakens selection.
 
 Neutrals therefore darken in light and lighten in dark on any surface; primary moves
