@@ -3,7 +3,7 @@
 		@apply relative w-fit;
 
 		[data-part="control"] {
-			@apply grid grid-cols-[1fr_32px] grid-rows-[1fr_1fr] border border-input rounded-md h-9 focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive overflow-hidden;
+			@apply grid grid-cols-[1fr_32px] grid-rows-[1fr_1fr] border border-input rounded-md h-9 focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 overflow-hidden;
 		}
 
 		[data-part="input"] {

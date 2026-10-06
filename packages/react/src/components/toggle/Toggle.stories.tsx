@@ -3,7 +3,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BoldIcon } from "lucide-react";
 import { fn } from "storybook/test";
-import { Toggle, ToggleIndicator } from "./Toggle";
+import { ThemePanels } from "../../stories/theme-panels";
+import { Toggle, ToggleGroup, ToggleGroupItem, ToggleIndicator } from ".";
 
 const meta = {
 	title: "React/Toggle",
@@ -72,4 +73,32 @@ export const WithFieldError: Story = {
 		...WithField.args,
 		error: "Bold formatting is not available in this context.",
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div className="flex flex-col gap-4">
+				<div className="flex flex-wrap items-center gap-2">
+					<Toggle>
+						<BoldIcon size={16} />
+					</Toggle>
+					<Toggle pressed>
+						<BoldIcon size={16} />
+					</Toggle>
+					<Toggle disabled>
+						<BoldIcon size={16} />
+					</Toggle>
+					<Toggle pressed disabled>
+						<BoldIcon size={16} />
+					</Toggle>
+				</div>
+				<ToggleGroup variant="segmented" defaultValue={["two"]}>
+					<ToggleGroupItem value="one">One</ToggleGroupItem>
+					<ToggleGroupItem value="two">Two</ToggleGroupItem>
+					<ToggleGroupItem value="three">Three</ToggleGroupItem>
+				</ToggleGroup>
+			</div>
+		</ThemePanels>
+	),
 };

@@ -2,6 +2,7 @@
 
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { fn } from "storybook/test";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Switch } from "./Switch";
 
 const meta = {
@@ -74,4 +75,21 @@ export const Large: Story = {
 		...Default.args,
 		size: "lg",
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<div class="flex flex-col gap-3">
+					<Switch label="Off" />
+					<Switch label="On" defaultChecked />
+					<Switch label="Disabled" disabled />
+					<Switch label="Disabled on" defaultChecked disabled />
+					<Switch label="Small on" size="sm" defaultChecked />
+					<Switch label="Large on" size="lg" defaultChecked />
+				</div>
+			)}
+		</ThemePanels>
+	),
 };

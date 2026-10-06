@@ -45,7 +45,7 @@
 		}
 
 		[data-part="close-trigger"] {
-			@apply absolute top-1 right-1 p-0.5 rounded-md text-muted-foreground hover:bg-accent hover:text-primary cursor-pointer;
+			@apply absolute top-1 right-1 p-0.5 rounded-md text-muted-foreground hover:bg-hover hover:text-primary cursor-pointer;
 			svg {
 				@apply size-5;
 			}
@@ -60,7 +60,13 @@
 		}
 
 		[data-part="action-trigger"] {
-			@apply text-sm text-primary ml-4 mt-2 cursor-pointer border rounded px-1 bg-muted-foreground/10 hover:bg-accent hover:text-primary;
+			@apply text-sm text-primary ml-4 mt-2 cursor-pointer border rounded px-1 bg-muted-foreground/10;
+
+			/* Keeps the resting fill; hover stacks the foreground overlay on top
+			   so the step stays away from the toast surface in both themes. */
+			&:hover {
+				background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+			}
 		}
 	}
 }

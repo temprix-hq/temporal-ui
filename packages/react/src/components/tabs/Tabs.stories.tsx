@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger, type TabsProps } from ".";
 
 const meta = {
@@ -39,4 +40,15 @@ export const Default: Story = {
 
 export const Pills: Story = {
 	render: (props) => <Basic {...props} variant="pills" />,
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div className="flex flex-col gap-6">
+				<Basic defaultValue="react" />
+				<Basic variant="pills" defaultValue="react" />
+			</div>
+		</ThemePanels>
+	),
 };

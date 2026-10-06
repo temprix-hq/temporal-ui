@@ -40,7 +40,7 @@
 		}
 
 		[data-scope="accordion"][data-part="item-trigger"] {
-			@apply px-4 hover:bg-muted/50 cursor-default;
+			@apply px-4 hover:bg-hover active:bg-pressed cursor-default;
 		}
 
 		[data-scope="accordion"][data-part="item-content"] > * {

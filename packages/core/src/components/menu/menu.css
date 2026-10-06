@@ -28,10 +28,13 @@
 				@apply opacity-50 pointer-events-none;
 			}
 			&:not([data-disabled]) {
-				@apply focus-visible:bg-accent focus-visible:text-accent-foreground;
+				@apply focus-visible:bg-hover focus-visible:text-foreground;
 			}
 			&[data-highlighted] {
-				@apply bg-accent text-accent-foreground;
+				@apply bg-hover text-foreground;
+			}
+			&:active:not([data-disabled]) {
+				@apply bg-pressed;
 			}
 		}
 
@@ -44,10 +47,13 @@
 				@apply opacity-50 pointer-events-none;
 			}
 			&:not([data-disabled]) {
-				@apply focus-visible:bg-accent focus-visible:text-accent-foreground;
+				@apply focus-visible:bg-hover focus-visible:text-foreground;
 			}
 			&[data-highlighted] {
-				@apply bg-accent text-accent-foreground;
+				@apply bg-hover text-foreground;
+			}
+			&:active:not([data-disabled]) {
+				@apply bg-pressed;
 			}
 		}
 

@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Tabs, TabsContent, TabsList, TabsTrigger, type TabsProps } from ".";
+import { ThemePanels } from "../../stories/theme-panels";
 
 const meta = {
 	title: "Solid/Tabs",
@@ -54,4 +55,17 @@ export const Controlled: Story = {
 			</Tabs>
 		);
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<div class="flex flex-col gap-6">
+					<Basic defaultValue="react" />
+					<Basic variant="pills" defaultValue="react" />
+				</div>
+			)}
+		</ThemePanels>
+	),
 };

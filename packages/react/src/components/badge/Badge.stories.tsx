@@ -2,6 +2,7 @@
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowRight, Trash } from "lucide-react";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Badge } from "./Badge";
 
 const meta = {
@@ -62,4 +63,23 @@ export const EndIcon: Story = {
 			</>
 		),
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			<div className="flex flex-wrap items-center gap-2">
+				<Badge>Primary</Badge>
+				<Badge variant="secondary">Secondary</Badge>
+				<Badge variant="destructive">Destructive</Badge>
+				<Badge variant="outline">Outline</Badge>
+				<a href="#states">
+					<Badge>Primary as link</Badge>
+				</a>
+				<a href="#states">
+					<Badge variant="outline">Outline as link</Badge>
+				</a>
+			</div>
+		</ThemePanels>
+	),
 };

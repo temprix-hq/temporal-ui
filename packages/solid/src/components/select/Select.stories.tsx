@@ -1,6 +1,7 @@
 import { Banana } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createListCollection } from ".";
+import { ThemePanels } from "../../stories/theme-panels";
 import { Button } from "../button";
 import { Popover } from "../popover";
 import { Select } from "./Select";
@@ -55,6 +56,28 @@ export const Default: Story = {
 		label: "Fruits",
 		portal: true,
 	},
+};
+
+export const States: Story = {
+	render: () => (
+		<ThemePanels>
+			{() => (
+				<Select
+					className="min-w-[250px]"
+					collection={createListCollection({
+						items: [
+							{ value: "apple", label: "Apple" },
+							{ value: "banana", label: "Banana" },
+							{ value: "cherry", label: "Cherry" },
+						],
+					})}
+					placeholder="Select a fruit"
+					label="Fruits"
+					portal={false}
+				/>
+			)}
+		</ThemePanels>
+	),
 };
 
 export const MaxDropdownHeight: Story = {
