@@ -1,6 +1,6 @@
 {
 	"name": "@temporal-ui/core",
-	"version": "0.10.2",
+	"version": "1.0.0",
 	"description": "Framework-agnostic core definitions, utils and styles for Temporal UI components",
 	"bugs": {
 		"url": "https://github.com/temprix-hq/temporal-ui/issues"
