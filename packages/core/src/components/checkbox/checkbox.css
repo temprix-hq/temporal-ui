@@ -12,7 +12,7 @@
 				@apply cursor-not-allowed opacity-50;
 			}
 			&[data-invalid] {
-				@apply border-destructive ring-destructive/20 dark:ring-destructive/40;
+				@apply border-destructive dark:border-destructive/50 ring-destructive/20 dark:ring-destructive/40;
 			}
 			&[data-focus-visible] {
 				@apply border-ring ring-ring/50 ring-[3px];

@@ -156,20 +156,20 @@
 		}
 	}
 
-	/* Destructive */
+	/* Destructive — tinted fill that raises its alpha on hover (shadcn recipe) */
 	[data-component="button"][data-variant="destructive"] {
-		@apply bg-destructive text-white shadow-xs focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40;
+		@apply bg-destructive/10 text-destructive focus-visible:ring-destructive/20 focus-visible:border-destructive/40 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40;
 		&:hover {
-			@apply bg-destructive-hover;
+			@apply bg-destructive/20 dark:bg-destructive/30;
 		}
 		&:active {
-			@apply bg-destructive-pressed;
+			@apply bg-destructive/30 dark:bg-destructive/40;
 		}
 		&[aria-pressed="true"] {
-			@apply bg-destructive-pressed;
+			@apply bg-destructive/30 dark:bg-destructive/40;
 		}
 		.loading {
-			@apply border-b-white border-r-white;
+			@apply border-b-destructive border-r-destructive;
 		}
 	}
 }

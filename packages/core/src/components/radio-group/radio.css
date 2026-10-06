@@ -21,7 +21,7 @@
 				@apply cursor-not-allowed opacity-50;
 			}
 			&[data-invalid] {
-				@apply ring-destructive/20 dark:ring-destructive/40 border-destructive;
+				@apply ring-destructive/20 dark:ring-destructive/40 border-destructive dark:border-destructive/50;
 			}
 			&[data-state="checked"]:before {
 				@apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 content-[''] rounded-full size-2 bg-primary;

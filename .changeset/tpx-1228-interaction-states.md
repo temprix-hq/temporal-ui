@@ -4,10 +4,12 @@
 "@temporal-ui/solid": minor
 ---
 
-TPX-1228: one hover/pressed rule for core CSS.
+TPX-1228: shadcn colour alignment + one hover/pressed rule.
 
-Replaces the mixed per-component hover recipes (alpha fades like `/80` and `/90`, accent/muted token swaps, primary tints) with one directional rule backed by state tokens: filled elements mix their own background toward their own foreground token, transparent elements use a translucent foreground overlay (`bg-hover` / `bg-pressed`), pressed is one step further, and selected + hover stacks the overlay on the resting fill. Neutrals darken in light and lighten in dark; step sizes live in new `--state-hover` / `--state-pressed` tokens.
+Base tokens in `@temporal-ui/core` now track shadcn neutral (`apps/v4/registry/themes.ts` at shadcn-ui/ui@0e3abd6) in both themes: light canvas/card/popover are white with `secondary`/`muted`/`accent` at 0.97 and `border`/`input` at 0.922; dark canvas drops to 0.145 with `card`/`popover`/`sidebar` at 0.205 and `accent` at 0.269; `--chart-1`…`--chart-5` are defined for the first time. Temporal-only tokens (`--state-*`, `--hover-overlay`, `--pressed-overlay`, `--trigger-hover`, `--outline-hover`, scrollbar and sidebar widths) are kept.
 
-`@theme` is now `@theme inline`, so nested `.dark` wrappers (a `.dark` element on a light page) resolve dark tokens correctly — Storybook pages no longer need to force `html.dark`. New tokens: `--color-hover`, `--color-pressed`, `--color-primary-hover/-pressed`, `--color-secondary-hover/-pressed`, `--color-destructive-hover/-pressed`, `--color-card-hover/-pressed`, `--color-trigger-hover`, `--color-outline-hover`.
+Interaction states follow one directional rule instead of per-component recipes: filled elements mix their own background toward their own foreground token, transparent elements use a translucent foreground overlay (`bg-hover` / `bg-pressed`), pressed is one step further, and selected + hover stacks the overlay on the resting fill. Primary hover/pressed mix toward `primary-foreground` at 20%/28%. `@theme` is now `@theme inline`, so nested `.dark` wrappers (a `.dark` element on a light page) resolve dark tokens correctly.
 
-Also fixes in the same pass: switch thumb is visible when unchecked in dark (lifts to `--popover`), sidebar outline button border shadow resolves (was wrapped in `hsl()` around an OKLCH value), toggle on-state and calendar today/in-range cells no longer override their own hover rules, tabs unselected triggers are muted in both themes and have a hover state.
+Component colours aligned with current shadcn: tinted destructive button (`bg-destructive/10 text-destructive`, hover `/20`, dark `/20` → hover `/30`) and badge; switch thumb `dark:bg-foreground` unchecked / `dark:bg-primary-foreground` checked with `dark:bg-input/80` unchecked track; tooltip `bg-foreground text-background` with matching arrow; dialog content `bg-popover`; `dark:aria-invalid:border-destructive/50` on all fields (and `data-invalid` equivalents on checkbox, radio, switch); disabled text input and textarea get `disabled:bg-input/50 dark:disabled:bg-input/80`.
+
+Also fixed: switch thumb visibility in dark, sidebar outline button `hsl()`-wrapped OKLCH border shadow, toggle on-state and calendar today/in-range cells overriding their own hover rules, tabs unselected triggers muted in both themes with a hover state.

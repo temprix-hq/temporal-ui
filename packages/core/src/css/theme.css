@@ -44,8 +44,6 @@
 	--color-primary-pressed: color-mix(in oklch, var(--primary), var(--primary-foreground) 28%);
 	--color-secondary-hover: color-mix(in oklch, var(--secondary), var(--secondary-foreground) 6%);
 	--color-secondary-pressed: color-mix(in oklch, var(--secondary), var(--secondary-foreground) 10%);
-	--color-destructive-hover: color-mix(in oklch, var(--destructive), white 10%);
-	--color-destructive-pressed: color-mix(in oklch, var(--destructive), white 16%);
 	--color-card-hover: color-mix(in oklch, var(--card), var(--foreground) var(--state-hover));
 	--color-card-pressed: color-mix(in oklch, var(--card), var(--foreground) var(--state-pressed));
 	--color-trigger-hover: var(--trigger-hover);
