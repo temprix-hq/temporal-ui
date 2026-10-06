@@ -40,8 +40,8 @@
 	   in --state-hover / --state-pressed (base.css) and differ per theme. */
 	--color-hover: color-mix(in oklch, var(--foreground) var(--state-hover), transparent);
 	--color-pressed: color-mix(in oklch, var(--foreground) var(--state-pressed), transparent);
-	--color-primary-hover: color-mix(in oklch, var(--primary), var(--primary-foreground) 10%);
-	--color-primary-pressed: color-mix(in oklch, var(--primary), var(--primary-foreground) 16%);
+	--color-primary-hover: color-mix(in oklch, var(--primary), var(--primary-foreground) 20%);
+	--color-primary-pressed: color-mix(in oklch, var(--primary), var(--primary-foreground) 28%);
 	--color-secondary-hover: color-mix(in oklch, var(--secondary), var(--secondary-foreground) 6%);
 	--color-secondary-pressed: color-mix(in oklch, var(--secondary), var(--secondary-foreground) 10%);
 	--color-destructive-hover: color-mix(in oklch, var(--destructive), white 10%);
