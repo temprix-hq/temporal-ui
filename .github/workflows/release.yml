@@ -10,6 +10,7 @@ concurrency:
 permissions:
   contents: write
   id-token: write
+  pull-requests: read
 
 jobs:
   release:
@@ -32,6 +33,9 @@ jobs:
 
       - name: Apply accumulated changesets
         id: version
+        env:
+          # @changesets/changelog-github resolves PR links and authors via the GitHub API.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
 

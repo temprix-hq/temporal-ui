@@ -57,6 +57,11 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
 
 Re-run the workflow to retry a failed publish after version bumps are already on `main` (no changesets left, but versions not yet on npm).
 
+## Troubleshooting changelog generation
+
+- `changeset version` fails with "Please create a GitHub personal access token ... add it as the GITHUB_TOKEN environment variable" when the versioning step has no `GITHUB_TOKEN`. `@changesets/changelog-github` calls the GitHub API to link PRs and authors. The **Apply accumulated changesets** step must pass `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, and `release.yml` must include `permissions.pull-requests: read`. No personal access token is needed.
+- Changesets aborts before writing any files in this case, so re-running the workflow is safe.
+
 ## Troubleshooting OIDC publish failures
 
 - `release.yml` must include `permissions.id-token: write`.
