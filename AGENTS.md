@@ -95,18 +95,25 @@ Use `bun run changeset --empty` only when explicitly documenting a no-release ch
 
 ### Publishing a new version
 
-When the user asks to **publish**, **release**, or **ship a new version**, trigger the GitHub Actions release workflow on `main`. Do **not** run `npm publish` or `bun run publish` locally unless the user explicitly asks for a local/manual publish.
+Releasing is two GitHub Actions workflows run on `main`, with a PR merge in between (`main` only accepts changes through pull requests). Do **not** run `npm publish` or `bun run publish` locally unless the user explicitly asks for a local/manual publish.
 
-```bash
-gh workflow run release.yml --ref main
-```
+1. **Prepare release** applies the pending changesets on the `changeset-release/main` branch (version bump + changelog + `bun.lock`), opens the version PR `chore: version packages (vX.Y.Z)` and starts the Quality checks on it. It never publishes.
 
-A release is two runs of that same command, with a PR merge in between (`main` only accepts changes through pull requests):
+   ```bash
+   gh workflow run release-prep.yml --ref main
+   ```
 
-1. **Pending changesets on `main`**: the run applies them on the `changeset-release/main` branch (version bump + changelog + `bun.lock`), opens the version PR `chore: version packages (vX.Y.Z)` and starts the Quality checks on it. Nothing is published. Report the PR URL and stop; the user merges it.
-2. **Version PR merged**: the run finds no changesets and unpublished versions, publishes to npmjs.org, and creates git tags and GitHub Releases.
+   Report the PR URL and stop; the user merges it. Re-run to rebuild the version PR after more changesets land.
 
-Re-run the command to rebuild the version PR after more changesets land, or to retry a failed publish.
+2. **Release** publishes the versions on `main` to npmjs.org and creates git tags and GitHub Releases. It never changes versions, and fails if changesets are still pending.
+
+   ```bash
+   gh workflow run release.yml --ref main
+   ```
+
+   Re-run to retry a failed publish.
+
+When the user asks to **publish**, **release**, or **ship a new version**: run Prepare release if changesets are pending under `.changeset/`, otherwise run Release.
 
 Watch a run (optional):
 
@@ -169,4 +176,4 @@ No local services to start. After `bun install`:
 - Do not change only React or only Solid — keep framework bindings in sync unless the task is explicitly one-sided
 - Do not invent component APIs in a framework package; shared props live in `@temporal-ui/core`
 - Do not ship versionable library changes without a changeset in the PR
-- Do not publish to npm locally when the user wants a release; run `gh workflow run release.yml --ref main`
+- Do not publish to npm locally when the user wants a release; use the Prepare release and Release workflows
