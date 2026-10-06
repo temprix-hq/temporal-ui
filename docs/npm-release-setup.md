@@ -10,7 +10,10 @@ This document covers the one-time bootstrap.
 
 On `temprix-hq/temporal-ui`, open **Settings → Actions → General → Workflow permissions**:
 
-1. Select **Read and write permissions** for `GITHUB_TOKEN` (required to commit version bumps during release).
+1. Select **Read and write permissions** for `GITHUB_TOKEN` (required to push the version branch, tags and GitHub Releases).
+2. Enable **Allow GitHub Actions to create and approve pull requests** (required to open the version PR).
+
+The `main-protection` ruleset stays as is: the release workflow never pushes to `main` directly and needs no bypass.
 
 ## npm trusted publisher (per package)
 
@@ -49,17 +52,28 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
 ## Release flow (after setup)
 
 1. **Accumulate changesets on `main`** — feature PRs include `bun run changeset` and merge to `main`. Changeset files sit on `main` until you release; nothing runs automatically.
-2. **When ready to ship** — open **Actions → Release → Run workflow** on `main`. One run does:
-   - Applies all pending changesets (`changeset version`): bumps `package.json` versions, updates changelogs, refreshes `bun.lock`
-   - Commits `chore: version packages` to `main`
+2. **Prepare the release** — open **Actions → Release → Run workflow** on `main`. With pending changesets, the run:
+   - Applies them (`changeset version`): bumps `package.json` versions, updates changelogs, refreshes `bun.lock`
+   - Force-pushes the result to the `changeset-release/main` branch as `chore: version packages (vX.Y.Z)`
+   - Opens (or updates) the version PR against `main`
+   - Starts the **Quality** workflow on that branch, so the required `Checks` and `Unit Tests` report on the PR
+3. **Review and merge the version PR.** This is where the library reaches its release state on `main`. Nothing is published yet.
+4. **Publish** — run **Actions → Release** on `main` again. With no changesets left and versions not yet on npm, the run:
    - Publishes to npmjs.org (OIDC)
    - Creates git tags and GitHub Releases
 
-Re-run the workflow to retry a failed publish after version bumps are already on `main` (no changesets left, but versions not yet on npm).
+If more changesets land on `main` before the version PR merges, run Release again: it rebuilds `changeset-release/main` from `main` and updates the PR.
+
+Re-run the workflow on `main` to retry a failed publish (no changesets left, but versions not yet on npm).
+
+## Troubleshooting the version PR
+
+- `Checks` and `Unit Tests` stay "expected" on the version PR: pushes made with `GITHUB_TOKEN` do not fire `pull_request` workflows, so `release.yml` starts `quality.yml` through `workflow_dispatch`. `quality.yml` must keep its `workflow_dispatch` trigger and `release.yml` must include `permissions.actions: write`. To start the checks by hand, run **Actions → Quality** on `changeset-release/main`.
+- "GitHub Actions is not permitted to create or approve pull requests": enable the repository setting listed above. The branch is already pushed, so re-running Release is enough.
 
 ## Troubleshooting changelog generation
 
-- `changeset version` fails with "Please create a GitHub personal access token ... add it as the GITHUB_TOKEN environment variable" when the versioning step has no `GITHUB_TOKEN`. `@changesets/changelog-github` calls the GitHub API to link PRs and authors. The **Apply accumulated changesets** step must pass `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, and `release.yml` must include `permissions.pull-requests: read`. No personal access token is needed.
+- `changeset version` fails with "Please create a GitHub personal access token ... add it as the GITHUB_TOKEN environment variable" when the versioning step has no `GITHUB_TOKEN`. `@changesets/changelog-github` calls the GitHub API to link PRs and authors. The versioning step must pass `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, and `release.yml` must grant `permissions.pull-requests` (it has `write`, to open the version PR). No personal access token is needed.
 - Changesets aborts before writing any files in this case, so re-running the workflow is safe.
 
 ## Troubleshooting OIDC publish failures

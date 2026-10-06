@@ -101,14 +101,19 @@ When the user asks to **publish**, **release**, or **ship a new version**, trigg
 gh workflow run release.yml --ref main
 ```
 
-Then watch the run (optional):
+A release is two runs of that same command, with a PR merge in between (`main` only accepts changes through pull requests):
+
+1. **Pending changesets on `main`**: the run applies them on the `changeset-release/main` branch (version bump + changelog + `bun.lock`), opens the version PR `chore: version packages (vX.Y.Z)` and starts the Quality checks on it. Nothing is published. Report the PR URL and stop; the user merges it.
+2. **Version PR merged**: the run finds no changesets and unpublished versions, publishes to npmjs.org, and creates git tags and GitHub Releases.
+
+Re-run the command to rebuild the version PR after more changesets land, or to retry a failed publish.
+
+Watch a run (optional):
 
 ```bash
 gh run list --workflow=release.yml --limit 1
 gh run watch <run-id>
 ```
-
-The workflow applies pending changesets (version bump + changelog + commit to `main`), publishes to npmjs.org, and creates git tags and GitHub Releases. Re-run the same command to retry if publish failed after versioning.
 
 One-time npm OIDC and registry setup: `docs/npm-release-setup.md`.
 

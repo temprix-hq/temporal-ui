@@ -2,6 +2,8 @@ name: Quality
 
 on:
   pull_request:
+  # Started by release.yml on the version PR branch, where pull_request does not fire.
+  workflow_dispatch:
 
 permissions:
   contents: read

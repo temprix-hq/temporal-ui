@@ -8,9 +8,10 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
+  actions: write
   contents: write
   id-token: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   release:
@@ -31,17 +32,19 @@ jobs:
       - name: Install
         uses: ./.github/actions/install
 
-      - name: Apply accumulated changesets
+      - name: Open version PR or detect unpublished versions
         id: version
         env:
           # @changesets/changelog-github resolves PR links and authors via the GitHub API.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_BRANCH: changeset-release/main
         run: |
           pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
 
           if [ "$pending" -eq 0 ]; then
             if node scripts/has-unpublished-versions.mjs; then
-              echo "No changesets, but unpublished versions remain (retry)."
+              echo "No changesets, and unpublished versions are on this ref. Publishing."
               echo "should_publish=true" >> "$GITHUB_OUTPUT"
             else
               echo "No pending changesets and nothing to publish."
@@ -50,18 +53,35 @@ jobs:
             exit 0
           fi
 
-          echo "Applying $pending changeset(s)..."
+          # main only accepts changes through pull requests, so the version bump
+          # goes to a release branch and is merged like any other change.
+          echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          echo "Applying $pending changeset(s) on $RELEASE_BRANCH..."
+          git checkout -B "$RELEASE_BRANCH"
           bun run ci:version
           git add -A
           if git diff --staged --quiet; then
             echo "No version changes after changeset version."
-            echo "should_publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          git commit -m "chore: version packages"
-          git push origin HEAD
-          echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          version=$(node -p "require('./packages/core/package.json').version")
+          git commit -m "chore: version packages (v$version)"
+          git push --force origin "HEAD:refs/heads/$RELEASE_BRANCH"
+
+          open_pr=$(gh pr list --head "$RELEASE_BRANCH" --base main --state open --json number --jq '.[].number')
+          if [ -z "$open_pr" ]; then
+            gh pr create --base main --head "$RELEASE_BRANCH" \
+              --title "chore: version packages (v$version)" \
+              --body "Applies the pending changesets: version bumps, changelogs and \`bun.lock\`. After this merges, run the **Release** workflow on \`main\` again to publish v$version to npm. Re-running Release before merging rebuilds this branch from \`main\`."
+          else
+            gh pr edit "$open_pr" --title "chore: version packages (v$version)"
+          fi
+
+          # Pushes made with GITHUB_TOKEN do not start pull_request workflows,
+          # so start the required checks on the release branch explicitly.
+          gh workflow run quality.yml --ref "$RELEASE_BRANCH"
+          echo "Version PR is ready. Merge it, then run Release again to publish."
 
       - name: Publish to npm
         if: steps.version.outputs.should_publish == 'true'
