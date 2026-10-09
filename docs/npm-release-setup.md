@@ -58,7 +58,7 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
    - Opens (or updates) the version PR against `main`
    - Starts the **Quality** workflow on that branch, so the required `Checks` and `Unit Tests` report on the PR
 3. **Review and merge the version PR.** This is where the library reaches its release state on `main`. Nothing is published yet.
-4. **Publish** — open **Actions → Release → Run workflow** on `main`. The run:
+4. **Publish** — open **Actions → Release → Run workflow** on `main` and enter the version from the merged version PR (for example `1.1.0`). It becomes the run title (`Release 1.1.0`), and the run fails before publishing if it does not match `packages/core/package.json`. The run:
    - Publishes to npmjs.org (OIDC)
    - Creates git tags and GitHub Releases
 
@@ -66,7 +66,7 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
 
 If more changesets land on `main` before the version PR merges, run Prepare release again: it rebuilds `changeset-release/main` from `main` and updates the PR.
 
-Re-run Release to retry a failed publish.
+Re-run Release (with the same version) to retry a failed publish.
 
 ## Troubleshooting the version PR
 

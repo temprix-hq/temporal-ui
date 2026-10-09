@@ -108,10 +108,10 @@ Releasing is two GitHub Actions workflows run on `main`, with a PR merge in betw
 2. **Release** publishes the versions on `main` to npmjs.org and creates git tags and GitHub Releases. It never changes versions, and fails if changesets are still pending.
 
    ```bash
-   gh workflow run release.yml --ref main
+   gh workflow run release.yml --ref main -f version=X.Y.Z
    ```
 
-   Re-run to retry a failed publish.
+   `version` is required, becomes the run title (`Release X.Y.Z`) and must match `packages/core/package.json` on `main`, or the run fails before publishing. Re-run to retry a failed publish.
 
 When the user asks to **publish**, **release**, or **ship a new version**: run Prepare release if changesets are pending under `.changeset/`, otherwise run Release.
 
