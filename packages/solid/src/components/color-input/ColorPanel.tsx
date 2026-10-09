@@ -2,11 +2,11 @@ import type { HTMLProps } from "@ark-ui/solid";
 import { ColorPicker, parseColor, useColorPickerContext } from "@ark-ui/solid/color-picker";
 import type { Color } from "@ark-ui/solid/color-picker";
 import type { ColorPanelProps as CoreColorPanelProps } from "@temporal-ui/core/color-input";
-import { normalizeHexColor } from "@temporal-ui/core/utils/color";
+import { getHueKeyAction, normalizeHexColor } from "@temporal-ui/core/utils/color";
 import { cx } from "@temporal-ui/core/utils/cx";
 import { testId as testIdFn } from "@temporal-ui/core/utils/string";
 import type { JSX } from "solid-js";
-import { createSignal, createUniqueId, onMount, splitProps } from "solid-js";
+import { createSignal, createUniqueId, onCleanup, onMount, splitProps } from "solid-js";
 
 export interface ColorPanelProps
 	extends
@@ -54,6 +54,30 @@ export function ColorPanelControls(props: {
 	const onThumbKeyDown = (event: KeyboardEvent) => {
 		if (props.passEscape) passEscapeThrough(event);
 	};
+	const api = useColorPickerContext();
+	// zag's keyboard handler calls `incrementChannel("hue")` on the picker value, which throws for
+	// RGB (the `ColorInput` format). Handle the hue keys on the HSB equivalent in the capture phase
+	// instead; zag's own handler then skips the event because it is `defaultPrevented`. HSB and HSL
+	// values (`ColorPanel`) keep zag's built-in handling.
+	const onHueKeyDownCapture = (event: KeyboardEvent) => {
+		if (api().format !== "rgba") return;
+		const action = getHueKeyAction(event);
+		const thumb = event.currentTarget as HTMLElement;
+		if (!action || thumb.hasAttribute("data-disabled")) return;
+		event.preventDefault();
+		if (thumb.closest("[data-part=root]")?.hasAttribute("data-readonly")) return;
+		const hsb = api().value.toFormat("hsba");
+		const { minValue, maxValue } = hsb.getChannelRange("hue");
+		api().setValue(
+			action === "min"
+				? hsb.withChannelValue("hue", minValue)
+				: action === "max"
+					? hsb.withChannelValue("hue", maxValue)
+					: action.step > 0
+						? hsb.incrementChannel("hue", action.step)
+						: hsb.decrementChannel("hue", -action.step),
+		);
+	};
 
 	return (
 		<>
@@ -80,6 +104,10 @@ export function ColorPanelControls(props: {
 				<ColorPicker.ChannelSliderThumb
 					data-scope={"color-input"}
 					data-testid={tid("--channel-slider-thumb")}
+					ref={(element: HTMLElement) => {
+						element.addEventListener("keydown", onHueKeyDownCapture, true);
+						onCleanup(() => element.removeEventListener("keydown", onHueKeyDownCapture, true));
+					}}
 					onKeyDown={onThumbKeyDown}
 				/>
 			</ColorPicker.ChannelSlider>
