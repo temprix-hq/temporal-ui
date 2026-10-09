@@ -5,6 +5,7 @@ import { testId as testIdFn } from "@temporal-ui/core/utils/string";
 import type React from "react";
 import { forwardRef } from "react";
 import { Field } from "../field";
+import { ColorPanelControls } from "./ColorPanel";
 
 export interface ColorInputProps
 	extends
@@ -69,30 +70,7 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>((props, 
 				<Portal>
 					<ColorPicker.Positioner data-scope={"color-input"} data-testid={tid("--positioner")}>
 						<ColorPicker.Content data-scope={"color-input"} data-testid={tid("--content")}>
-							<ColorPicker.Area data-scope={"color-input"} data-testid={tid("--area")}>
-								<ColorPicker.AreaBackground
-									data-scope={"color-input"}
-									data-testid={tid("--area-background")}
-								/>
-								<ColorPicker.AreaThumb
-									data-scope={"color-input"}
-									data-testid={tid("--area-thumb")}
-								/>
-							</ColorPicker.Area>
-							<ColorPicker.ChannelSlider
-								channel="hue"
-								data-scope={"color-input"}
-								data-testid={tid("--channel-slider")}
-							>
-								<ColorPicker.ChannelSliderTrack
-									data-scope={"color-input"}
-									data-testid={tid("--channel-slider-track")}
-								/>
-								<ColorPicker.ChannelSliderThumb
-									data-scope={"color-input"}
-									data-testid={tid("--channel-slider-thumb")}
-								/>
-							</ColorPicker.ChannelSlider>
+							<ColorPanelControls testId={testId} />
 						</ColorPicker.Content>
 					</ColorPicker.Positioner>
 				</Portal>

@@ -6,6 +6,7 @@ import { testId as testIdFn } from "@temporal-ui/core/utils/string";
 import type { JSX } from "solid-js";
 import { splitProps } from "solid-js";
 import { Field } from "../field";
+import { ColorPanelControls } from "./ColorPanel";
 import { Portal } from "solid-js/web";
 
 export interface ColorInputProps
@@ -55,30 +56,7 @@ export function ColorInput(_props: ColorInputProps) {
 				<Portal>
 					<ColorPicker.Positioner data-scope={"color-input"} data-testid={tid("--positioner")}>
 						<ColorPicker.Content data-scope={"color-input"} data-testid={tid("--content")}>
-							<ColorPicker.Area data-scope={"color-input"} data-testid={tid("--area")}>
-								<ColorPicker.AreaBackground
-									data-scope={"color-input"}
-									data-testid={tid("--area-background")}
-								/>
-								<ColorPicker.AreaThumb
-									data-scope={"color-input"}
-									data-testid={tid("--area-thumb")}
-								/>
-							</ColorPicker.Area>
-							<ColorPicker.ChannelSlider
-								channel="hue"
-								data-scope={"color-input"}
-								data-testid={tid("--channel-slider")}
-							>
-								<ColorPicker.ChannelSliderTrack
-									data-scope={"color-input"}
-									data-testid={tid("--channel-slider-track")}
-								/>
-								<ColorPicker.ChannelSliderThumb
-									data-scope={"color-input"}
-									data-testid={tid("--channel-slider-thumb")}
-								/>
-							</ColorPicker.ChannelSlider>
+							<ColorPanelControls testId={fieldProps.testId} />
 						</ColorPicker.Content>
 					</ColorPicker.Positioner>
 				</Portal>

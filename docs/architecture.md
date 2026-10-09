@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: October 5, 2026
+Last updated: October 9, 2026
 
 Temporal UI is a published design system. Shared contracts and CSS live in core; React and Solid packages are thin, framework-specific bindings over those contracts, mostly wrapping [Ark UI](https://ark-ui.com/).
 
@@ -49,6 +49,7 @@ packages/core/src/
 │   ├── base.css         # Resets, light/dark tokens (`:root` / `.dark`)
 │   └── theme.css        # Tailwind v4 `@theme` mapping
 ├── utils/
+│   ├── color/           # normalizeHexColor
 │   ├── cx/              # Class name helper
 │   └── string/          # getInitials, testId, …
 └── styles.css           # Imports global CSS + every component CSS file
@@ -157,7 +158,7 @@ from raw CSS — use the base.css tokens instead.
 
 ## Component catalog
 
-Current first-class components (folders under `packages/core/src/components/`). Keep this table in sync when adding or removing one.
+Current first-class components (folders under `packages/core/src/components/`). Keep this table in sync when adding or removing one. Some folders hold more than one component (`ColorPanel` lives in `color-input/`, and `ColorInput` renders the same area and hue slider in its popover).
 
 ### Layout & structure
 
@@ -183,7 +184,8 @@ Current first-class components (folders under `packages/core/src/components/`). 
 | `Select`      | Dropdown                                        |
 | `Slider`      | Range slider                                    |
 | `Switch`      | On/off switch                                   |
-| `ColorInput`  | Color picker                                    |
+| `ColorInput`  | Color picker (hex field with a popover)         |
+| `ColorPanel`  | Inline color area, hue slider and hex field     |
 | `DateInput`   | Date picker                                     |
 | `Field`       | Label/error wrapper; folder also has `Fieldset` |
 | `Toggle`      | Toggle button; folder also has `ToggleGroup`    |
