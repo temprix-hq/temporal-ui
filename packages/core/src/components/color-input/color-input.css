@@ -11,12 +11,49 @@
 		@apply ps-9 w-28 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none outline-none;
 	}
 
-	[data-scope="color-input"][data-part="content"] {
-		@apply w-96 p-3 border rounded-md bg-popover text-popover-foreground flex flex-col gap-3;
+	/* Popover wrapper: fixes the popover width so the content and the panel inside it fill it. */
+	[data-scope="color-input"][data-part="positioner"] {
+		@apply w-96;
 	}
 
+	[data-scope="color-input"][data-part="content"],
+	[data-scope="color-input"][data-part="panel"] {
+		@apply flex flex-col gap-3;
+	}
+
+	[data-scope="color-input"][data-part="content"] {
+		@apply p-3 border rounded-md bg-popover text-popover-foreground;
+	}
+
+	/* Inline panel (ColorPanel): no chrome, sizes to its container. */
+	[data-scope="color-input"][data-part="panel"] {
+		@apply w-full min-w-0;
+	}
+
+	[data-scope="color-input"][data-part="hex-row"] {
+		@apply flex items-center gap-2;
+	}
+
+	[data-scope="color-input"][data-part="hex-label"] {
+		@apply shrink-0 text-xs font-medium text-muted-foreground data-disabled:opacity-50;
+	}
+
+	[data-scope="color-input"][data-part="hex-input"] {
+		@apply flex-1;
+	}
+
+	/* --color-input-area-height lets an app resize the area (popover and panel). */
 	[data-scope="color-input"][data-part="area"] {
-		@apply h-[200px];
+		@apply h-[var(--color-input-area-height,200px)];
+	}
+
+	/* Disabled panel. Ark marks the area itself, but only the thumb of the slider. */
+	[data-scope="color-input"][data-part="area"] {
+		@apply data-disabled:opacity-50 data-disabled:cursor-not-allowed;
+	}
+
+	[data-scope="color-input"][data-part="channel-slider"] {
+		@apply has-[[data-disabled]]:opacity-50 has-[[data-disabled]]:cursor-not-allowed;
 	}
 
 	[data-scope="color-input"][data-part="area-thumb"],
@@ -29,6 +66,6 @@
 	}
 
 	[data-scope="color-input"][data-part="area-background"] {
-		@apply h-[200px] rounded-sm border border-input;
+		@apply h-[var(--color-input-area-height,200px)] rounded-sm border border-input;
 	}
 }

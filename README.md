@@ -73,6 +73,7 @@ function App() {
 | `Select`      | Dropdown selection                  |
 | `Slider`      | Range slider input                  |
 | `ColorInput`  | Color picker input                  |
+| `ColorPanel`  | Inline color area, hue and hex      |
 | `DateInput`   | Date picker input                   |
 | `Field`       | Form field wrapper with label/error |
 | `Toggle`      | Two-state toggle button             |
@@ -159,7 +160,7 @@ temporal-ui/
 │   │   └── src/
 │   │       ├── components/ # Component definitions and CSS
 │   │       ├── css/        # Global styles (animations, base, theme)
-│   │       └── utils/      # Shared utilities (cx, string)
+│   │       └── utils/      # Shared utilities (color, cx, string)
 │   ├── react/              # React implementations
 │   │   └── src/
 │   │       ├── components/ # React components with stories/tests
