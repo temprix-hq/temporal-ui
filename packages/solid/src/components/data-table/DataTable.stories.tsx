@@ -1,6 +1,5 @@
-import type { ColumnDef } from "@tanstack/solid-table";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { DataTable, type DataTableProps } from "./";
+import { DataTable, type ColumnDef, type DataTableProps } from "./";
 
 type Person = {
 	name: string;

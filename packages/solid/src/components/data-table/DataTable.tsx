@@ -1,30 +1,57 @@
 import {
-	createSolidTable,
+	columnFilteringFeature,
+	columnVisibilityFeature,
+	createFilteredRowModel,
+	createTable,
+	filterFns,
 	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
+	rowSelectionFeature,
+	tableFeatures,
+	type AccessorKeyColumnDef as TanstackAccessorKeyColumnDef,
+	type CellData,
+	type ColumnDef as TanstackColumnDef,
+	type ColumnVisibilityState,
+	type RowData,
 	type TableOptions,
 } from "@tanstack/solid-table";
 import type { DataTableProps as CoreDataTableProps } from "@temporal-ui/core/data-table";
+import { testId } from "@temporal-ui/core/utils/string";
 import { For, mergeProps, Show, splitProps, type JSX } from "solid-js";
 import { Loader } from "../loader";
 import { Table } from "../table";
-import { testId } from "@temporal-ui/core/utils/string";
 
-export interface DataTableProps<TData>
-	extends CoreDataTableProps<JSX.Element>, Omit<TableOptions<TData>, "getCoreRowModel"> {
-	getCoreRowModel?: TableOptions<TData>["getCoreRowModel"];
-}
+/** The fixed TanStack Table feature set every DataTable is created with. */
+export const dataTableFeatures = tableFeatures({
+	columnVisibilityFeature,
+	rowSelectionFeature,
+	columnFilteringFeature,
+	filteredRowModel: createFilteredRowModel(),
+	filterFns,
+});
 
-export function DataTable<TData>(props: DataTableProps<TData>) {
+export type DataTableFeatures = typeof dataTableFeatures;
+
+export type ColumnDef<
+	TData extends RowData,
+	TValue extends CellData = CellData,
+> = TanstackColumnDef<DataTableFeatures, TData, TValue>;
+
+export type AccessorKeyColumnDef<
+	TData extends RowData,
+	TValue extends CellData = CellData,
+> = TanstackAccessorKeyColumnDef<DataTableFeatures, TData, TValue>;
+
+export type VisibilityState = ColumnVisibilityState;
+
+export type { RowData };
+
+export type DataTableProps<TData extends RowData> = CoreDataTableProps<JSX.Element> &
+	Omit<TableOptions<DataTableFeatures, TData>, "features">;
+
+export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
 	const [controlProps, tableProps] = splitProps(props, ["loading", "testId"]);
 
-	const createTableProps = mergeProps(tableProps, {
-		getCoreRowModel: getCoreRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-	});
-
-	const table = createSolidTable(createTableProps);
+	const table = createTable(mergeProps(tableProps, { features: dataTableFeatures }));
 
 	const tid = testId(props.testId);
 
