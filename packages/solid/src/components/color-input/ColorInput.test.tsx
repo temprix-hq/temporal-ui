@@ -3,6 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ColorInput } from "./ColorInput";
 
+async function openPopover(user: ReturnType<typeof userEvent.setup>) {
+	await user.click(screen.getByTestId("ci--trigger"));
+	return await screen.findByTestId("ci--channel-slider-thumb");
+}
+
 describe("ColorInput", () => {
 	beforeEach(() => {
 		cleanup();
@@ -54,5 +59,44 @@ describe("ColorInput", () => {
 		await user.type(input, "#ff0000{Enter}");
 
 		expect(onValueChange).toHaveBeenLastCalledWith("#FF0000");
+	});
+
+	it("changes hue with the arrow keys on the hue slider thumb", async () => {
+		const user = userEvent.setup();
+		const onValueChange = vi.fn();
+		render(() => <ColorInput testId="ci" defaultValue="#ff0000" onValueChange={onValueChange} />);
+
+		const thumb = await openPopover(user);
+		const hue = () => Number(thumb.getAttribute("aria-valuenow"));
+		expect(hue()).toBe(0);
+
+		thumb.focus();
+		await user.keyboard("{ArrowRight}");
+		await waitFor(() => expect(hue()).toBeGreaterThan(0));
+		const afterRight = hue();
+		expect(onValueChange).toHaveBeenCalledTimes(1);
+		expect(onValueChange).toHaveBeenLastCalledWith(expect.stringMatching(/^#[0-9A-F]{6}$/i));
+		expect(onValueChange).not.toHaveBeenLastCalledWith("#FF0000");
+
+		await user.keyboard("{ArrowRight}");
+		await waitFor(() => expect(hue()).toBeGreaterThan(afterRight));
+		const afterSecondRight = hue();
+
+		await user.keyboard("{ArrowLeft}");
+		await waitFor(() => expect(hue()).toBeLessThan(afterSecondRight));
+	});
+
+	it("keeps the hidden input value in rgba format after hue keyboard changes", async () => {
+		const user = userEvent.setup();
+		render(() => <ColorInput testId="ci" defaultValue="#ff0000" />);
+
+		const thumb = await openPopover(user);
+		thumb.focus();
+		await user.keyboard("{ArrowRight}");
+
+		await waitFor(() => expect(Number(thumb.getAttribute("aria-valuenow"))).toBeGreaterThan(0));
+		const hidden = screen.getByTestId<HTMLInputElement>("ci--input");
+		expect(hidden.value).toMatch(/^rgba\(\d+, \d+, \d+, 1\)$/);
+		expect(hidden.value).not.toBe("rgba(255, 0, 0, 1)");
 	});
 });

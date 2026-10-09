@@ -1,7 +1,7 @@
 import { ColorPicker, parseColor, useColorPickerContext } from "@ark-ui/react/color-picker";
 import type { Color } from "@ark-ui/react/color-picker";
 import type { ColorPanelProps as CoreColorPanelProps } from "@temporal-ui/core/color-input";
-import { normalizeHexColor } from "@temporal-ui/core/utils/color";
+import { getHueKeyAction, normalizeHexColor } from "@temporal-ui/core/utils/color";
 import { testId as testIdFn } from "@temporal-ui/core/utils/string";
 import type React from "react";
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
@@ -54,6 +54,30 @@ export function ColorPanelControls(props: {
 	const { testId, passEscape } = props;
 	const tid = testIdFn(testId);
 	const onThumbKeyDown = passEscape ? passEscapeThrough : undefined;
+	const api = useColorPickerContext();
+	// zag's keyboard handler calls `incrementChannel("hue")` on the picker value, which throws for
+	// RGB (the `ColorInput` format). Handle the hue keys on the HSB equivalent in the capture phase
+	// instead; zag's own handler then skips the event because it is `defaultPrevented`. HSB and HSL
+	// values (`ColorPanel`) keep zag's built-in handling.
+	const onHueKeyDownCapture = (event: React.KeyboardEvent<HTMLElement>) => {
+		if (api.format !== "rgba") return;
+		const action = getHueKeyAction(event);
+		const thumb = event.currentTarget;
+		if (!action || thumb.hasAttribute("data-disabled")) return;
+		event.preventDefault();
+		if (thumb.closest("[data-part=root]")?.hasAttribute("data-readonly")) return;
+		const hsb = api.value.toFormat("hsba");
+		const { minValue, maxValue } = hsb.getChannelRange("hue");
+		api.setValue(
+			action === "min"
+				? hsb.withChannelValue("hue", minValue)
+				: action === "max"
+					? hsb.withChannelValue("hue", maxValue)
+					: action.step > 0
+						? hsb.incrementChannel("hue", action.step)
+						: hsb.decrementChannel("hue", -action.step),
+		);
+	};
 
 	return (
 		<>
@@ -80,6 +104,7 @@ export function ColorPanelControls(props: {
 				<ColorPicker.ChannelSliderThumb
 					data-scope={"color-input"}
 					data-testid={tid("--channel-slider-thumb")}
+					onKeyDownCapture={onHueKeyDownCapture}
 					onKeyDown={onThumbKeyDown}
 				/>
 			</ColorPicker.ChannelSlider>
