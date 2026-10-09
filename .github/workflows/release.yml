@@ -1,7 +1,17 @@
 name: Release
 
+# The run title is fixed when the run starts, so the version has to be an input
+# (it cannot be read from the checkout). The first step checks it against
+# packages/core/package.json, so a mistyped version never publishes.
+run-name: Release ${{ inputs.version }}
+
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Version being released (must match packages/core/package.json on this ref, e.g. 1.1.0)
+        required: true
+        type: string
 
 concurrency:
   group: release
@@ -32,7 +42,16 @@ jobs:
 
       - name: Check release state
         id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
+          current=$(node -p "require('./packages/core/package.json').version")
+
+          if [ "$INPUT_VERSION" != "$current" ]; then
+            echo "::error::Requested version $INPUT_VERSION does not match $current in packages/core/package.json on this ref."
+            exit 1
+          fi
+
           pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
 
           if [ "$pending" -ne 0 ]; then
