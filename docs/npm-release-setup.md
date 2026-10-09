@@ -53,7 +53,7 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
 
 1. **Accumulate changesets on `main`** — feature PRs include `bun run changeset` and merge to `main`. Changeset files sit on `main` until you release; nothing runs automatically.
 2. **Prepare the release** — open **Actions → Prepare release → Run workflow** on `main`. The run:
-   - Applies all pending changesets (`changeset version`): bumps `package.json` versions, updates changelogs, refreshes `bun.lock`
+   - Applies all pending changesets (`changeset version`): bumps `package.json` versions (including the private root, synced by `scripts/sync-root-version.mjs`), updates changelogs, refreshes `bun.lock`
    - Force-pushes the result to the `changeset-release/main` branch as `chore: version packages (vX.Y.Z)`
    - Opens (or updates) the version PR against `main`
    - Starts the **Quality** workflow on that branch, so the required `Checks` and `Unit Tests` report on the PR
