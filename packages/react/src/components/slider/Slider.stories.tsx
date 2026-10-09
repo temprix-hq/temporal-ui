@@ -15,7 +15,6 @@ type Story = StoryObj<typeof meta>;
 export const CompleteExample: Story = {
 	args: {
 		label: "Your productivity",
-		placeholder: "0",
 		min: 0,
 		max: 100,
 		step: 1,

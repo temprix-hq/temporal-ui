@@ -1,6 +1,6 @@
 import { Banana } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { createListCollection } from ".";
+import { createListCollection, type SelectItem } from ".";
 import { ThemePanels } from "../../stories/theme-panels";
 import { Button } from "../button";
 import { Popover } from "../popover";
@@ -17,10 +17,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const collection = createListCollection({
+const collection = createListCollection<SelectItem>({
 	items: [
 		{ value: "apple", label: "Apple" },
-		{ value: "banana", label: "Banana", icon: () => <Banana /> },
+		{ value: "banana", label: "Banana", icon: <Banana /> },
 		{ value: "cherry", label: "Cherry" },
 		{ value: "tomato", label: "Tomato" },
 		{ value: "orange", label: "Orange" },
@@ -59,12 +59,13 @@ export const Default: Story = {
 };
 
 export const States: Story = {
+	args: { collection },
 	render: () => (
 		<ThemePanels>
 			{() => (
 				<Select
 					className="min-w-[250px]"
-					collection={createListCollection({
+					collection={createListCollection<SelectItem>({
 						items: [
 							{ value: "apple", label: "Apple" },
 							{ value: "banana", label: "Banana" },
@@ -99,7 +100,7 @@ export const Deselectable: Story = {
 export const AlignItemWithTrigger: Story = {
 	args: {
 		className: "min-w-[250px]",
-		collection: createListCollection({
+		collection: createListCollection<SelectItem>({
 			items: [
 				{ value: "small", label: "Small" },
 				{ value: "medium", label: "Medium" },
@@ -172,9 +173,7 @@ export const Invalid: Story = {
 export const LargeDataset: Story = {
 	args: {
 		...Default.args,
-		searchable: true,
-		searchPlaceholder: "Search items...",
-		collection: createListCollection({
+		collection: createListCollection<SelectItem>({
 			items: Array.from({ length: 1000 }, (_, index) => ({
 				value: `item-${index}`,
 				label: `Item ${index}`,
@@ -186,15 +185,13 @@ export const LargeDataset: Story = {
 export const LargeDatasetWithGroups: Story = {
 	args: {
 		...Default.args,
-		searchable: true,
-		searchPlaceholder: "Search items...",
-		collection: createListCollection({
+		collection: createListCollection<SelectItem>({
 			items: Array.from({ length: 1000 }, (_, index) => ({
 				value: `item-${index}`,
 				label: `Item ${index}`,
 				group: `Group ${Math.floor(index / 10) + 1}`,
 			})),
-			groupBy: (item) => item.group,
+			groupBy: (item) => item.group ?? "",
 		}),
 	},
 };

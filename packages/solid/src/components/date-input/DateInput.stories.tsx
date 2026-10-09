@@ -1,6 +1,5 @@
-import type { DatePicker } from "@ark-ui/solid/date-picker";
 import { CalendarIcon } from "lucide-solid";
-import { createSignal, type ComponentProps } from "solid-js";
+import { createSignal } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { ThemePanels } from "../../stories/theme-panels";
 import { Calendar, DateInput, type DateInputProps } from ".";
@@ -76,21 +75,19 @@ export const WithEndSection: Story = {
 };
 
 export const CalendarSingle: Story = {
-	args: {
-		className: "w-[250px]",
-	},
-	render: (args: DateInputProps & ComponentProps<typeof DatePicker.Root>) => <Calendar {...args} />,
+	render: () => <Calendar className="w-[250px]" />,
 };
 
 export const CalendarRange: Story = {
-	args: {
-		selectionMode: "range",
-		numOfMonths: 2,
-		className: "w-[550px]",
-		fixedWeeks: true,
-		outsideDaySelectable: true,
-	},
-	render: (args: DateInputProps & ComponentProps<typeof DatePicker.Root>) => <Calendar {...args} />,
+	render: () => (
+		<Calendar
+			selectionMode="range"
+			numOfMonths={2}
+			className="w-[550px]"
+			fixedWeeks
+			outsideDaySelectable
+		/>
+	),
 };
 
 export const States: Story = {
