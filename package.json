@@ -1,6 +1,6 @@
 {
 	"name": "temporal-ui",
-	"version": "0.10.2",
+	"version": "1.0.0",
 	"private": true,
 	"description": "Monorepo for Temporal UI Design System (React, Solid bindings)",
 	"license": "MIT",
@@ -26,9 +26,9 @@
 		"typecheck": "turbo run typecheck",
 		"check": "turbo run check",
 		"changeset": "changeset",
-		"version": "changeset version",
+		"version": "changeset version && node scripts/sync-root-version.mjs",
 		"publish": "bun run build && node scripts/npm-publish.mjs",
-		"ci:version": "changeset version && bun install",
+		"ci:version": "changeset version && node scripts/sync-root-version.mjs && bun install",
 		"ci:publish": "node scripts/npm-publish.mjs"
 	},
 	"devDependencies": {
