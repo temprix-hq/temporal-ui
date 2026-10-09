@@ -80,6 +80,24 @@ describe("Menu Component", () => {
 		expect(onSelect).toHaveBeenCalledWith("item1");
 	});
 
+	it("calls onSelect with the clicked item when another item is keyboard-highlighted", async () => {
+		const user = userEvent.setup();
+		const onSelect = vi.fn();
+		render(() => <MenuWrapper onSelect={onSelect} />);
+
+		screen.getByRole("button", { name: "Open Menu" }).focus();
+		await user.keyboard("{ArrowDown}");
+
+		await waitFor(() => {
+			expect(screen.getByRole("menuitem", { name: "Item 1" })).toHaveAttribute("data-highlighted");
+		});
+
+		await user.click(screen.getByRole("menuitem", { name: "Item 2" }));
+
+		expect(onSelect).toHaveBeenCalledTimes(1);
+		expect(onSelect).toHaveBeenCalledWith("item2");
+	});
+
 	it("closes menu after item selection when closeOnSelect is true", async () => {
 		const user = userEvent.setup();
 		render(() => <MenuWrapper closeOnSelect />);
