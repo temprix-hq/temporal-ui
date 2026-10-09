@@ -1,9 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: bun
+    # The root manifest covers the Bun workspaces (packages/*) and bun.lock;
+    # listing /packages/* too opens a duplicate PR per bump.
     directories:
       - /
-      - /packages/*
     schedule:
       interval: weekly
       day: monday
@@ -30,7 +31,7 @@ updates:
         applies-to: version-updates
         patterns:
           - "@tanstack/*-table"
-        update-types: ["minor", "patch"]
+        update-types: ["major", "minor", "patch"]
 
       tailwind:
         applies-to: version-updates
