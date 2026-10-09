@@ -1,8 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { DataTableProps } from "./DataTable";
+import type { ColumnDef, DataTableProps } from "./DataTable";
 import { DataTable } from "./DataTable";
 
 type Person = {

@@ -1,26 +1,60 @@
 import {
+	columnFilteringFeature,
+	columnVisibilityFeature,
+	createFilteredRowModel,
+	filterFns,
 	flexRender,
-	getCoreRowModel,
-	useReactTable,
+	rowSelectionFeature,
+	tableFeatures,
+	useTable,
+	type AccessorKeyColumnDef as TanstackAccessorKeyColumnDef,
+	type CellData,
+	type ColumnDef as TanstackColumnDef,
+	type ColumnVisibilityState,
+	type RowData,
 	type TableOptions,
 } from "@tanstack/react-table";
 import type { DataTableProps as CoreDataTableProps } from "@temporal-ui/core/data-table";
 import { testId as createTestId } from "@temporal-ui/core/utils/string";
+import type { ReactNode } from "react";
 import { Loader } from "../loader";
 import { Table } from "../table";
 
-export interface DataTableProps<TData>
-	extends CoreDataTableProps<React.ReactNode>, Omit<TableOptions<TData>, "getCoreRowModel"> {
-	getCoreRowModel?: TableOptions<TData>["getCoreRowModel"];
-}
+/** The fixed TanStack Table feature set every DataTable is created with. */
+export const dataTableFeatures = tableFeatures({
+	columnVisibilityFeature,
+	rowSelectionFeature,
+	columnFilteringFeature,
+	filteredRowModel: createFilteredRowModel(),
+	filterFns,
+});
 
-export function DataTable<TData>(props: DataTableProps<TData>) {
+export type DataTableFeatures = typeof dataTableFeatures;
+
+export type ColumnDef<
+	TData extends RowData,
+	TValue extends CellData = CellData,
+> = TanstackColumnDef<DataTableFeatures, TData, TValue>;
+
+export type AccessorKeyColumnDef<
+	TData extends RowData,
+	TValue extends CellData = CellData,
+> = TanstackAccessorKeyColumnDef<DataTableFeatures, TData, TValue>;
+
+export type VisibilityState = ColumnVisibilityState;
+
+export type { RowData };
+
+export type DataTableProps<TData extends RowData> = CoreDataTableProps<ReactNode> &
+	Omit<TableOptions<DataTableFeatures, TData>, "features">;
+
+export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
 	const { loading, testId, ...tableProps } = props;
 	const tid = createTestId(testId);
 
-	const table = useReactTable({
-		getCoreRowModel: getCoreRowModel(),
+	const table = useTable({
 		...tableProps,
+		features: dataTableFeatures,
 	});
 
 	return (

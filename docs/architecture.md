@@ -85,6 +85,25 @@ Storybook: React on port **6006**, Solid on port **6007**.
 
 `Collapsible` is re-exported from Ark UI (`@ark-ui/<framework>/collapsible`) rather than wrapped as a Temporal component.
 
+### DataTable and TanStack Table
+
+`DataTable` wraps TanStack Table 9 (`useTable` in React, `createTable` in Solid). Both packages declare the same fixed feature set once, in `src/components/data-table/DataTable.tsx`:
+
+```ts
+export const dataTableFeatures = tableFeatures({
+	columnVisibilityFeature,
+	rowSelectionFeature,
+	columnFilteringFeature,
+	filteredRowModel: createFilteredRowModel(),
+	filterFns,
+});
+export type DataTableFeatures = typeof dataTableFeatures;
+```
+
+`DataTableProps<TData>` is a type alias: the core props plus TanStack `TableOptions<DataTableFeatures, TData>` without `features`, so callers pass `columns`, `data`, `state` and `on*Change` handlers but never a feature set. Adding a feature (sorting, pagination, ...) means changing `dataTableFeatures` in both packages.
+
+`@temporal-ui/<framework>/data-table` exports a curated list instead of re-exporting TanStack: `DataTable`, `DataTableProps`, `dataTableFeatures`, `DataTableFeatures`, `RowData`, `VisibilityState` (alias of `ColumnVisibilityState`), and the single-feature-set aliases `ColumnDef<TData, TValue?>` and `AccessorKeyColumnDef<TData, TValue?>`, which keep the v8 call shape. Anything else from TanStack is imported from `@tanstack/<framework>-table` directly.
+
 ## Component layering
 
 1. **Core** — props interface generic over children `T`, plus CSS that targets `data-component`, `data-size`, `data-variant`, and similar attributes.
@@ -151,7 +170,7 @@ from raw CSS — use the base.css tokens instead.
 | Tests           | Vitest 4                                                                                              |
 | Docs UI         | Storybook 10                                                                                          |
 | Headless UI     | Ark UI 5 (`@ark-ui/react`, `@ark-ui/solid`)                                                           |
-| Tables          | TanStack Table                                                                                        |
+| Tables          | TanStack Table 9 (`@tanstack/react-table`, `@tanstack/solid-table`)                                   |
 | Git hooks       | Lefthook                                                                                              |
 | Versioning      | Changesets                                                                                            |
 | CI              | `.github/workflows/quality.yml` — format, lint (`--deny-warnings`), typecheck, build, then unit tests |
