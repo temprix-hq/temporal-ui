@@ -1,6 +1,6 @@
 {
 	"name": "@temporal-ui/solid",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Solid.JS bindings for Temporal UI components",
 	"bugs": {
 		"url": "https://github.com/temprix-hq/temporal-ui/issues"
@@ -70,7 +70,7 @@
 	"dependencies": {
 		"@ark-ui/solid": "5.39.3",
 		"@tanstack/solid-table": "9.2.4",
-		"@temporal-ui/core": "1.1.0"
+		"@temporal-ui/core": "1.1.1"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "5.4.0",

@@ -1,5 +1,13 @@
 # @temporal-ui/solid
 
+## 1.1.1
+
+### Patch Changes
+
+- [#308](https://github.com/temprix-hq/temporal-ui/pull/308) [`d0ee725`](https://github.com/temprix-hq/temporal-ui/commit/d0ee725ea63d0b7f42750a4433ae4e53a9f57464) Thanks [@dryu](https://github.com/dryu)! - Fix two problems in the 1.1.0 build. `styles.css` failed to compile in Tailwind v4 apps ("Cannot apply unknown utility class `h-[var(--color-input-area-height,`") because the colour area height used an `@apply` arbitrary value that the CSS build reformatted; it is now a plain `height: var(--color-input-area-height, 200px)` declaration, with the same result. In `@temporal-ui/solid`, `ColorPanel`'s `autoFocus` did nothing because the bundler removed the focus call; it now focuses the hex field again. No API changes.
+- Updated dependencies [[`d0ee725`](https://github.com/temprix-hq/temporal-ui/commit/d0ee725ea63d0b7f42750a4433ae4e53a9f57464)]:
+  - @temporal-ui/core@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes
