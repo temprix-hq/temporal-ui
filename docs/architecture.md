@@ -1,6 +1,6 @@
 # Architecture
 
-Last updated: October 9, 2026
+Last updated: October 10, 2026
 
 Temporal UI is a published design system. Shared contracts and CSS live in core; React and Solid packages are thin, framework-specific bindings over those contracts, mostly wrapping [Ark UI](https://ark-ui.com/).
 
@@ -159,21 +159,21 @@ from raw CSS — use the base.css tokens instead.
 
 ## Tooling map
 
-| Concern         | Tool                                                                                                  |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| Package manager | Bun 1.3.12                                                                                            |
-| Task graph      | Turbo 2                                                                                               |
-| Bundle          | tsdown                                                                                                |
-| Types           | TypeScript 6 + `tsgo` (native preview)                                                                |
-| Lint            | oxlint                                                                                                |
-| Format          | oxfmt                                                                                                 |
-| Tests           | Vitest 4                                                                                              |
-| Docs UI         | Storybook 10                                                                                          |
-| Headless UI     | Ark UI 5 (`@ark-ui/react`, `@ark-ui/solid`)                                                           |
-| Tables          | TanStack Table 9 (`@tanstack/react-table`, `@tanstack/solid-table`)                                   |
-| Git hooks       | Lefthook                                                                                              |
-| Versioning      | Changesets                                                                                            |
-| CI              | `.github/workflows/quality.yml` — format, lint (`--deny-warnings`), typecheck, build, then unit tests |
+| Concern         | Tool                                                                                                                                    |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Package manager | Bun 1.3.12                                                                                                                              |
+| Task graph      | Turbo 2                                                                                                                                 |
+| Bundle          | tsdown                                                                                                                                  |
+| Types           | TypeScript 6 + `tsgo` (native preview)                                                                                                  |
+| Lint            | oxlint                                                                                                                                  |
+| Format          | oxfmt                                                                                                                                   |
+| Tests           | Vitest 4                                                                                                                                |
+| Docs UI         | Storybook 10                                                                                                                            |
+| Headless UI     | Ark UI 5 (`@ark-ui/react`, `@ark-ui/solid`)                                                                                             |
+| Tables          | TanStack Table 9 (`@tanstack/react-table`, `@tanstack/solid-table`)                                                                     |
+| Git hooks       | Lefthook                                                                                                                                |
+| Versioning      | Changesets                                                                                                                              |
+| CI              | `.github/workflows/quality.yml` — format, lint (`--deny-warnings`), typecheck, build, built-output tests (`test:dist`), then unit tests |
 
 ## Component catalog
 

@@ -61,6 +61,7 @@ bun install
 | Build all packages | `bun run build`                           |
 | Unit tests         | `bun run test`                            |
 | One test file      | `bun run test -- <path to file>`          |
+| Built-output tests | `bun run test:dist` (builds first)        |
 | Typecheck          | `bun run typecheck`                       |
 | Lint               | `bun run lint` / `bun run lint:fix`       |
 | Format             | `bun run format` / `bun run format:check` |
@@ -136,7 +137,7 @@ bun run lint:fix
 bun run typecheck
 ```
 
-Tests do **not** require a prior build.
+Tests do **not** require a prior build. `bun run test:dist` tests the built packages (Tailwind compile of `dist/styles.css`, components from `dist/`); Turbo builds first.
 
 ### Before committing
 

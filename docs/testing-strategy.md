@@ -1,6 +1,6 @@
 # Testing strategy
 
-Last updated: August 13, 2026
+Last updated: October 10, 2026
 
 ## How to run tests
 
@@ -12,6 +12,20 @@ bun run test -- <path to file>    # one file
 ```
 
 Always run the tests you added or changed, and fix failures before finishing.
+
+### Built-output tests
+
+`packages/react/dist-tests/` and `packages/solid/dist-tests/` test the **built** package, not the source, so bundler and CSS build problems that unit tests cannot see are caught. They run with `vitest.dist.config.mts` and need a build first:
+
+```bash
+bun run build
+bun run test:dist                 # Turbo builds first if needed
+```
+
+- `styles.test.ts` compiles `dist/styles.css` with Tailwind v4 the way an app imports it (`@import "tailwindcss"` then the package styles). It fails on anything Tailwind cannot parse, such as an `@apply` value the CSS build reformatted.
+- `color-panel.test.tsx` renders `ColorPanel` from `dist/` and checks behaviour that depends on the bundled code (for example `autoFocus`).
+
+Add a built-output test when a fix depends on how the package is bundled. CI runs `test:dist` in the Checks job after the build.
 
 | Package | Environment | Library                                                                                                 |
 | ------- | ----------- | ------------------------------------------------------------------------------------------------------- |

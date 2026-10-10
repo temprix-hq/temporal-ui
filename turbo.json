@@ -15,6 +15,10 @@
 		"test": {
 			"inputs": ["src/**/*.test.ts", "src/**/*.test.tsx"]
 		},
+		"test:dist": {
+			"dependsOn": ["build"],
+			"inputs": ["dist-tests/**", "vite.config.mts"]
+		},
 		"lint": {
 			"dependsOn": ["^build"]
 		},

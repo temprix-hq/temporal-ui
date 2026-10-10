@@ -28,6 +28,13 @@ runs:
       shell: bash
       run: bun run build
 
+    # Built output: dist styles.css compiles under Tailwind v4, and the bundled components behave.
+    - name: Test built packages
+      id: dist
+      continue-on-error: true
+      shell: bash
+      run: bun run test:dist
+
     - name: Check for failures
       if: always()
       shell: bash
@@ -37,8 +44,9 @@ runs:
           "${{ steps.lint.outcome }}"
           "${{ steps.typecheck.outcome }}"
           "${{ steps.build.outcome }}"
+          "${{ steps.dist.outcome }}"
         )
-        names=("format" "lint" "typecheck" "build")
+        names=("format" "lint" "typecheck" "build" "dist")
         failed=()
 
         echo "## Check Results" >> $GITHUB_STEP_SUMMARY

@@ -55,6 +55,7 @@
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
 		"test:ci": "vitest run",
+		"test:dist": "vitest run --config vitest.dist.config.mts",
 		"clean": "rimraf dist node_modules .turbo",
 		"format": "oxfmt",
 		"format:check": "oxfmt --check",
