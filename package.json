@@ -17,6 +17,7 @@
 		"build": "turbo run build",
 		"clean": "turbo run clean && rimraf node_modules .turbo",
 		"test": "turbo run test",
+		"test:dist": "turbo run test:dist",
 		"react": "cd packages/react && bun run storybook",
 		"solid": "cd packages/solid && bun run storybook",
 		"lint": "oxlint",

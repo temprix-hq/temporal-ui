@@ -1,6 +1,6 @@
 # Rules for code generation
 
-Last updated: August 13, 2026
+Last updated: October 10, 2026
 
 Follow these rules when adding or changing components, utilities, or styles.
 
@@ -27,6 +27,7 @@ packages/core/src/components/<name>/
 - Import the new CSS from `packages/core/src/styles.css`.
 - Style with `[data-component="…"]`, `[data-size]`, `[data-variant]`, and other data attributes — not generated class hashes.
 - Use Tailwind `@apply` inside `@layer components`. Prefer existing tokens from `css/base.css` / `css/theme.css`.
+- Do not `@apply` an arbitrary value with a `var()` fallback (`h-[var(--x,200px)]`). The CSS build normalizes it to `var(--x, 200px)`, and Tailwind cannot parse an arbitrary value with a space. Write a plain declaration instead (`height: var(--x, 200px);`). `bun run test:dist` catches this.
 
 ### 2. React and Solid
 
@@ -51,6 +52,7 @@ When the component is an Ark primitive (or you need Ark props/parts):
 - Use the **Ark UI MCP** (`get_component_props`, `get_docs`, `get_example`) with `framework` set to `react` or `solid`. Do not guess Ark part names.
 - Wrap Ark; do not fork its internals. Map Ark callbacks to the simpler core API when core already defines one (e.g. Dialog `onOpenChange?: (open: boolean) => void`).
 - Solid: `mergeProps` / `splitProps`, `<Show>`, `<For>` / `<Index>`. Do not `.map()` inside JSX.
+- Solid refs: use a ref callback (`ref={(el) => (input = el)}`), not `ref={input}` on a bare `let`. The Solid package ships preserved JSX, so the bundler does not know the Solid compiler assigns the variable and may drop code that reads it.
 - React: destructure props with defaults; spread the rest onto the DOM/Ark root.
 
 ### 4. Publish surface

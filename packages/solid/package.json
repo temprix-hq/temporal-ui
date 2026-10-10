@@ -60,6 +60,7 @@
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
 		"test:ci": "vitest run",
+		"test:dist": "vitest run --config vitest.dist.config.mts",
 		"clean": "rimraf dist node_modules .turbo",
 		"storybook": "storybook dev -p 6007",
 		"build-storybook": "storybook build",
@@ -69,7 +70,7 @@
 	"dependencies": {
 		"@ark-ui/solid": "5.39.3",
 		"@tanstack/solid-table": "9.2.4",
-		"@temporal-ui/core": "workspace:*"
+		"@temporal-ui/core": "1.1.0"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "5.4.0",

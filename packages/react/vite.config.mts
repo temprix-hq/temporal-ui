@@ -7,6 +7,7 @@ export default defineConfig({
 	plugins: [tailwindcss(), react()],
 	test: {
 		globals: true,
+		include: ["src/**/*.test.{ts,tsx}"],
 		environment: "happy-dom",
 		setupFiles: "./node_modules/@testing-library/jest-dom/vitest",
 	},

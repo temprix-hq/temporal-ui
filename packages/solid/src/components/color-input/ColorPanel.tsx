@@ -156,7 +156,9 @@ function ColorPanelHexField(props: {
 				{props.label}
 			</label>
 			<input
-				ref={input}
+				// A ref callback, not `ref={input}`: this package ships preserved JSX, and the
+				// bundler treats a bare `let` ref as never assigned and drops `input?.focus()`.
+				ref={(element) => (input = element)}
 				id={inputId}
 				type="text"
 				value={draft() ?? current()}
