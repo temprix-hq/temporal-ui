@@ -1,36 +1,63 @@
 # Project Context & Agents
 
+Last updated: October 12th, 2026
+
+## Agent workflow
+
+Protocol: v1, public variant. Follow these steps for every change to a tracked file.
+
+### Change protocol (every change to a tracked file)
+
+1. **Branch first.** Branch from the up-to-date default branch and never commit to it. Name the branch `{agent}/{issue-id}-{slug}`, or `{agent}/{slug}` with no issue. If the harness assigns a branch name and forbids renaming it, keep that name and say so in the PR body.
+2. **Checks before each commit.** Run the formatter, linter and typecheck that this file names, together. Re-run them after any later edit. If this repo has no check for one of them, say so in your report.
+3. **Docs in the same change.** Update the docs that this file's Documentation section names.
+4. **Push and open a ready PR.** Never a draft. Put the issue ID in the title if there is one. Use the repo's PR template if it has one. After each later push, add a one-line PR comment.
+5. **Report back.** Give the PR URL, branch, checks run and result, docs touched, and open questions.
+6. **After the PR merges**, switch to the default branch, sync it, and delete the local branch.
+
+No issue is needed for typos, small fixes, chores, CI tweaks or dependency work. For a feature-sized or user-visible change without an issue, suggest one in your report. Do not create issues yourself.
+
+### Issue tracker (only when an issue is in play)
+
+Use the tracker the task names, for example a GitHub issue. Where the tracker supports it, mark the work as in progress and then as in review.
+
+- **Hard gate.** Do not create, edit or delete files until you have read the issue and all its comments, posted a starting comment with your plan, and marked the work as in progress. Then create the branch. This holds even if a todo list or plan already exists. If the approach changes, post an updated plan.
+- **An issue is a request, not a spec.** Check its assumptions against the code. Improve names, paths, structure and scope where the code says otherwise. If you change direction, comment on the issue saying what changed and why.
+- **While working.** Comment at key milestones and when blocked. After each push, add a short progress comment.
+- **After the PR is open.** Mark the work as in review. Further requested work goes on the same branch.
+
+### Handoff
+
+A coordinator hands over a task in this shape:
+
+```
+issue: <id> | none
+repo: this repo
+base: default branch
+branch: derive per protocol (or the name the harness assigned)
+pr: ready | none
+merge: review | automerge-on-green
+docs: per this file | explicitly skipped because ...
+report: PR URL, branch, checks run and result, docs touched, open questions
+```
+
+Missing fields default to `issue: none`, `branch: derive per protocol`, `pr: ready`, `merge: review`, `docs: per this file`. Never default `pr` to `none`. Echo the fields back and flag any that are missing before you start. One issue covers one repo.
+
+### Merge
+
+Squash merge is standard. Use `automerge-on-green` only when the handoff says so. If the `merge` field is missing, use `review`.
+
+### Product context
+
+This repo's own docs and code are the source for this repo. If a task needs product facts you cannot verify here, say so in your report. Do not invent them.
+
+## Repo runbook
+
 This file is the primary runbook for AI agents working in this repository. Claude Code loads it via `CLAUDE.md`.
 
 Repo docs under `docs/` are part of the deliverable, not optional commentary. Update them in the same change when you alter the behavior or structure they describe.
 
-## Work protocol (every change)
-
-Protocol: v1 (standalone variant)
-
-This applies to every change to a tracked file, with or without a ticket.
-
-1. **Branch first.** Branch from the up-to-date default branch and never commit
-   to it. Name the branch `{agent}/{ticket-id}-{slug}`, or `{agent}/{slug}` with
-   no ticket. Keep a harness-assigned name only if the harness forbids renaming,
-   and say so in the PR body.
-2. **Run checks before each commit.** Run the repo's formatter, linter and
-   typecheck together, and re-run them after any later edit.
-3. **Update docs in the same change.** Follow the repo's AGENTS.md
-   Documentation section, locally and in the cloud.
-4. **Push and open a ready PR.** Never a draft. Put the ticket ID in the title
-   if there is one. After each later push, add a one-line PR comment.
-5. **Report back.** Give the PR URL, branch, checks run and result, docs
-   touched, and open questions. On a local run, stop before push and PR only if
-   the coordinator said `pr: none`.
-6. **After the PR merges**, switch to the default branch, sync it, and delete
-   the local branch.
-
-No ticket is needed for typos, small fixes, chores, CI tweaks or dependency
-work. For a feature-sized or product-visible change without a ticket, suggest
-one in your report. Never create it yourself.
-
-In this repo, step 2 is the trio under **Before committing** and step 3 is the **Documentation** section. A change that affects consumers of the published packages also needs a changeset (see **Versioning and releases**).
+In this repo, step 2 of the change protocol is the trio under **Before committing** and step 3 is the **Documentation** section. A change that affects consumers of the published packages also needs a changeset (see **Versioning and releases**).
 
 ## Overview
 
