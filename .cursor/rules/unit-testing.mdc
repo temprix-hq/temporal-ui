@@ -1,5 +1,0 @@
----
-description: creating vitests
-alwaysApply: false
----
-When asked to create Vitest tests, follow `docs/testing-strategy.md`.

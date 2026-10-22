@@ -51,3 +51,6 @@ storybook-static
 
 # Ignore custom settings for run/debug configurations
 .idea/runConfigurations/
+
+# Local agent settings
+.claude/settings.local.json
