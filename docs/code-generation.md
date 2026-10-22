@@ -1,6 +1,6 @@
 # Rules for code generation
 
-Last updated: October 10, 2026
+Last updated: October 22nd, 2026
 
 Follow these rules when adding or changing components, utilities, or styles.
 
@@ -16,12 +16,7 @@ Mirror an existing similar component (Button for simple controls, Dialog/Popover
 
 ### 1. Core
 
-```
-packages/core/src/components/<name>/
-├── index.ts          # re-export types
-├── <name>.ts         # props interface extending BaseComponent<T> (or a more specific core type)
-└── <name>.css        # [data-component="<name>"] rules
-```
+Create `packages/core/src/components/<name>/` with `index.ts` (re-export types), `<name>.ts` (props interface extending `BaseComponent<T>` or a more specific core type) and `<name>.css` (`[data-component="<name>"]` rules).
 
 - Props interfaces are generic over children/content `T`.
 - Import the new CSS from `packages/core/src/styles.css`.
@@ -31,13 +26,7 @@ packages/core/src/components/<name>/
 
 ### 2. React and Solid
 
-```
-packages/<framework>/src/components/<name>/
-├── index.ts
-├── <Name>.tsx
-├── <Name>.stories.tsx
-└── <Name>.test.tsx
-```
+Create `packages/<framework>/src/components/<name>/` with `index.ts`, `<Name>.tsx`, `<Name>.stories.tsx` and `<Name>.test.tsx`.
 
 - Import core types from `@temporal-ui/core/<name>`.
 - Extend them with the framework node type (`React.ReactNode` / `JSX.Element`) and native or Ark element props.
@@ -57,7 +46,7 @@ When the component is an Ark primitive (or you need Ark props/parts):
 
 ### 4. Publish surface
 
-User-facing API or visual changes need a changeset (`bun run changeset`). Internal-only refactors do not.
+User-facing API or visual changes need a changeset; see `AGENTS.md`.
 
 ## File and API conventions
 
@@ -75,7 +64,6 @@ User-facing API or visual changes need a changeset (`bun run changeset`). Intern
 
 ## Do not
 
-- Add Biome, ESLint, or Prettier config.
 - Import from a framework package into core.
-- Change only the barrel export without a matching per-component `exports` path (already covered by `./*` if the folder and `index.ts` exist).
-- Re-wrap Ark `Collapsible` as a Temporal component unless a task explicitly asks; it is already re-exported from the React/Solid barrels.
+- Add a second styling approach or a Biome, ESLint or Prettier config.
+- Re-wrap Ark `Collapsible` as a Temporal component unless a task explicitly asks.

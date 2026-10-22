@@ -51,22 +51,7 @@ npm cannot attach a trusted publisher until the package **exists** on the regist
 
 ## Release flow (after setup)
 
-1. **Accumulate changesets on `main`** — feature PRs include `bun run changeset` and merge to `main`. Changeset files sit on `main` until you release; nothing runs automatically.
-2. **Prepare the release** — open **Actions → Prepare release → Run workflow** on `main`. The run:
-   - Applies all pending changesets (`changeset version`): bumps `package.json` versions (including the private root, synced by `scripts/sync-root-version.mjs`), updates changelogs, refreshes `bun.lock`
-   - Force-pushes the result to the `changeset-release/main` branch as `chore: version packages (vX.Y.Z)`
-   - Opens (or updates) the version PR against `main`
-   - Starts the **Quality** workflow on that branch, so the required `Checks` and `Unit Tests` report on the PR
-3. **Review and merge the version PR.** This is where the library reaches its release state on `main`. Nothing is published yet.
-4. **Publish** — open **Actions → Release → Run workflow** on `main` and enter the version from the merged version PR (for example `1.1.0`). It becomes the run title (`Release 1.1.0`), and the run fails before publishing if it does not match `packages/core/package.json`. The run:
-   - Publishes to npmjs.org (OIDC)
-   - Creates git tags and GitHub Releases
-
-**Prepare release** never publishes, and **Release** never changes versions. Release fails if changesets are still pending on `main`, and does nothing if the versions on `main` are already on npm.
-
-If more changesets land on `main` before the version PR merges, run Prepare release again: it rebuilds `changeset-release/main` from `main` and updates the PR.
-
-Re-run Release (with the same version) to retry a failed publish.
+The steps for agents are in `AGENTS.md`. In short: feature PRs add changesets to `main`, **Prepare release** opens the version PR, the version PR is merged, then **Release** publishes with the version as input. Prepare release never publishes, and Release never changes versions. If more changesets land before the version PR merges, run Prepare release again to rebuild `changeset-release/main`.
 
 ## Troubleshooting the version PR
 
