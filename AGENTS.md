@@ -4,8 +4,6 @@ Last updated: October 22nd, 2026
 
 Bun monorepo (Turbo) publishing `@temporal-ui/core`, `@temporal-ui/react` and `@temporal-ui/solid` in lockstep versions via Changesets. No backend, no env files. Visual work happens in Storybook; correctness is Vitest plus typecheck. `README.md` is for npm consumers; agent and contributor rules live here and in `docs/`.
 
-<!-- workflow v2 start -->
-
 ## Workflow
 
 Follow these steps for every change to a tracked file.
