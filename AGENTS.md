@@ -6,29 +6,19 @@ Bun monorepo (Turbo) publishing `@temporal-ui/core`, `@temporal-ui/react` and `@
 
 <!-- workflow v2 start -->
 
-## Workflow (v2)
+## Workflow
 
-Synced from `temprix-knowledge` `docs/workflow-block.md`. Do not edit it here. Full rules: `docs/agent-workflow.md` there.
+Follow these steps for every change to a tracked file.
 
-1. **Ticket first.** Search Linear (team Temprix, TPX) for an existing ticket, else create one in Todo before any code, with no `repo` label. Post a short plan comment and set Development. No ticket for typos, copy, comment or formatting changes, or one-line changes with no behaviour change. Never exempt: schema, data, API, billing, email, auth, infra, dependencies. One ticket covers one repo.
-2. **Branch** from the up-to-date default branch, never commit to it: `{agent}/{TPX-123}-{slug}`. Keep a harness-assigned name only if it cannot be renamed, and say so in the PR body.
-3. **Checks.** Before each commit run the formatter, linter and typecheck named in this file together, and re-run after any later edit. Report them as passing only if the last run was on the current tree.
-4. **Docs.** Update the docs this file names in the same change.
-5. **PR.** Open it ready for review, never draft, with the ticket ID in the title. After each later push add a one-line PR comment. Set the ticket to In Review.
-6. **Ask Andrey first** before merging, force-pushing, deploying, running migrations, changing CI, IAM or infrastructure, or adding a vendor.
-7. **Product facts.** Code wins over docs. If `temprix-knowledge` is checked out, read `product/product-overview.md` before stating product behaviour. If not, do not invent it, and say what you could not check.
-8. **Finish.** Update the ticket with the outcome and PR link. Report PR URL, branch, checks and result, docs touched, ticket status, open questions. After the merge, sync the default branch and delete the local branch.
+1. **Branch** from the up-to-date default branch and never commit to it: `{agent}/{issue-id}-{slug}`, or `{agent}/{slug}` with no issue. If the harness assigns a branch name and forbids renaming it, keep it and say so in the PR body.
+2. **Checks.** Before each commit run the formatter, linter and typecheck in **Before committing** below, together, and re-run them after any later edit. Report them as passing only if the last run was on the current tree.
+3. **Docs.** Update `docs/` and this file in the same change when you alter the behavior or structure they describe. Set `Last updated:` on files you edit.
+4. **Changeset.** A change that affects consumers of the published packages also needs one (see **Versioning and releases**).
+5. **PR.** Open it ready for review, never draft, using `.github/pull_request_template.md`, with the issue ID in the title if there is one. After each later push add a one-line PR comment. Squash merge is standard.
+6. **Ask first** before merging, force-pushing, publishing, changing CI or repository settings, or adding a dependency or service.
+7. **Report** the PR URL, branch, checks and result, docs touched and open questions. After the merge, sync the default branch and delete the local branch.
 
-<!-- workflow v2 end -->
-
-## Repo-specific workflow
-
-Repo-specific steps of the change protocol:
-
-- Checks (workflow step 3): the formatter, linter and typecheck in **Before committing** below.
-- Docs (workflow step 4): update `docs/` and this file when you change the behavior or structure they describe. Set `Last updated:` on files you edit.
-- A change that affects consumers of the published packages also needs a changeset (see **Versioning and releases**).
-- PR (workflow step 5): use `.github/pull_request_template.md`. Squash merge is standard.
+This repo's own docs and code are the source of truth. If a task needs facts you cannot verify here, say so instead of inventing them.
 
 ## Commands
 
