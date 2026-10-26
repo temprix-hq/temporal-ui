@@ -1,5 +1,11 @@
 # @temporal-ui/core
 
+## 1.1.2
+
+### Patch Changes
+
+- [#316](https://github.com/temprix-hq/temporal-ui/pull/316) [`54393c7`](https://github.com/temprix-hq/temporal-ui/commit/54393c79a403f1042f2dbbdc71ed8b45ef31c203) Thanks [@dryu](https://github.com/dryu)! - Fix `Select` with `alignItemWithTrigger` opening underneath later positioned content when it is not portaled. The positioner is now `position: relative` instead of `static`, so its z-index applies.
+
 ## 1.1.1
 
 ### Patch Changes
