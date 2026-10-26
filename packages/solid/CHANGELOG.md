@@ -1,5 +1,13 @@
 # @temporal-ui/solid
 
+## 1.1.3
+
+### Patch Changes
+
+- [#320](https://github.com/temprix-hq/temporal-ui/pull/320) [`c465f77`](https://github.com/temprix-hq/temporal-ui/commit/c465f7772dbd4b4a050663b1bcb5d9e6f2712882) Thanks [@dryu](https://github.com/dryu)! - Fix `Select` with `alignItemWithTrigger`: choosing an item with the mouse closed the list without selecting, keyboard navigation did nothing, and the item text touched the right edge. The list element is no longer remounted when alignment finishes, so focus and outside-press tracking stay on the real element, and the popup width now includes the item end padding.
+- Updated dependencies [[`c465f77`](https://github.com/temprix-hq/temporal-ui/commit/c465f7772dbd4b4a050663b1bcb5d9e6f2712882)]:
+  - @temporal-ui/core@1.1.3
+
 ## 1.1.2
 
 ### Patch Changes
