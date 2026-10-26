@@ -1,7 +1,7 @@
 import { Select as ArkSelect, useSelectContext } from "@ark-ui/solid/select";
 import type { SelectItem as CoreSelectItem } from "@temporal-ui/core/select";
 import { CheckIcon } from "lucide-solid";
-import { For, mergeProps, Show, type JSX } from "solid-js";
+import { createEffect, For, mergeProps, Show, type JSX } from "solid-js";
 import { useAlignItemWithTrigger } from "./use-align-item-with-trigger";
 
 export type SelectItem<D = unknown> = CoreSelectItem<D, JSX.Element>;
@@ -32,6 +32,9 @@ export interface SelectContentProps {
 	};
 }
 
+/** Layout-neutral wrapper used while an alignable select is open but not (yet) aligned. */
+const idleWrapperStyle = { display: "contents" };
+
 export function SelectContent(_props: SelectContentProps) {
 	const props = mergeProps({ maxHeight: 500 }, _props);
 	const context = useSelectContext();
@@ -45,6 +48,14 @@ export function SelectContent(_props: SelectContentProps) {
 		}),
 	);
 
+	let wrapperEl: HTMLDivElement | undefined;
+	createEffect(() => {
+		const content = wrapperEl?.firstElementChild;
+		if (shouldAlign() && !showAligned() && wrapperEl && content) {
+			wrapperEl.style.zIndex = getComputedStyle(content).zIndex;
+		}
+	});
+
 	const contentStyle = () =>
 		showAligned() ? alignedStyles()?.content : { "max-height": `${props.maxHeight}px` };
 
@@ -57,10 +68,12 @@ export function SelectContent(_props: SelectContentProps) {
 			data-align-item-with-trigger-pending={isAlignPending() ? "" : undefined}
 			style={showAligned() ? alignedStyles()?.positioner : undefined}
 		>
-			{/* Zag copies the positioner's first child's computed z-index onto `--z-index`.
-			    The wrapper exists only while aligned so standard placement reads Select.Content. */}
+			{/* Zag tracks the content element for outside presses and focus, so Select.Content must never
+			    remount while the select is open. A select that can align therefore always renders the
+			    wrapper and only changes its styles. Zag also copies the positioner's first child's computed
+			    z-index onto `--z-index`, so the idle wrapper takes over the content's computed z-index. */}
 			<Show
-				when={showAligned()}
+				when={shouldAlign()}
 				fallback={
 					<SelectContentBody
 						tid={props.tid}
@@ -70,7 +83,11 @@ export function SelectContent(_props: SelectContentProps) {
 					/>
 				}
 			>
-				<div data-align-item-with-trigger-active="" style={alignedStyles()?.popup}>
+				<div
+					ref={wrapperEl}
+					data-align-item-with-trigger-active={showAligned() ? "" : undefined}
+					style={showAligned() ? alignedStyles()?.popup : idleWrapperStyle}
+				>
 					<SelectContentBody
 						tid={props.tid}
 						classes={props.classes}

@@ -133,7 +133,11 @@ export function computeAlignItemWithTrigger(
 
 	// The popup is at least as wide as needed to fully cover the control, even
 	// when shifted left by the item indicator gutter.
-	const naturalWidth = contentEl.scrollWidth + contentBordersX;
+	// `scrollWidth` ends at the widest item text, so when the list overflows it misses the
+	// items' end padding and the text would touch the popup edge.
+	const itemPaddingEnd = Number.parseFloat(getComputedStyle(selectedItemEl).paddingRight) || 0;
+	const overflowsX = contentEl.scrollWidth > contentEl.clientWidth;
+	const naturalWidth = contentEl.scrollWidth + (overflowsX ? itemPaddingEnd : 0) + contentBordersX;
 	const minWidth = Math.max(
 		controlRect.width,
 		controlRect.right - Math.min(alignedLeft, controlRect.left),
