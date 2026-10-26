@@ -182,6 +182,46 @@ describe("computeAlignItemWithTrigger", () => {
 		expect(result.styles.scrollTop).toBeGreaterThanOrEqual(0);
 	});
 
+	it("adds the item end padding to the popup width when the list overflows", () => {
+		Object.defineProperty(document.documentElement, "clientHeight", {
+			configurable: true,
+			value: 800,
+		});
+
+		const fixture = createAlignFixture();
+		Object.defineProperty(fixture.contentEl, "scrollWidth", { configurable: true, value: 300 });
+		Object.defineProperty(fixture.contentEl, "clientWidth", { configurable: true, value: 250 });
+		computedStyleMocks.set(fixture.selectedItemEl, { paddingRight: "12px" });
+		const result = computeAlignItemWithTrigger(fixture);
+
+		expect(result.status).toBe("aligned");
+		if (result.status !== "aligned") {
+			return;
+		}
+
+		expect(result.styles.popup.width).toBe("312px");
+	});
+
+	it("keeps the popup width when the list does not overflow", () => {
+		Object.defineProperty(document.documentElement, "clientHeight", {
+			configurable: true,
+			value: 800,
+		});
+
+		const fixture = createAlignFixture();
+		Object.defineProperty(fixture.contentEl, "scrollWidth", { configurable: true, value: 250 });
+		Object.defineProperty(fixture.contentEl, "clientWidth", { configurable: true, value: 250 });
+		computedStyleMocks.set(fixture.selectedItemEl, { paddingRight: "12px" });
+		const result = computeAlignItemWithTrigger(fixture);
+
+		expect(result.status).toBe("aligned");
+		if (result.status !== "aligned") {
+			return;
+		}
+
+		expect(result.styles.popup.width).toBe("250px");
+	});
+
 	it("offsets the popup from the viewport by the margin alone", () => {
 		Object.defineProperty(document.documentElement, "clientHeight", {
 			configurable: true,
