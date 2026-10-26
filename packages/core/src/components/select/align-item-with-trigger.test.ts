@@ -176,7 +176,8 @@ describe("computeAlignItemWithTrigger", () => {
 		expect(result.styles.popup.transform).toBe("none");
 		expect(result.styles.popup.width).toBe("250px");
 		expect(result.styles.popup.zIndex).toBe("50");
-		expect(result.styles.positioner.position).toBe("static");
+		// Static would drop the positioner's z-index and bury an unportaled popup under later content.
+		expect(result.styles.positioner.position).toBe("relative");
 		expect(result.styles.content.maxHeight).toBe("100%");
 		expect(result.styles.scrollTop).toBeGreaterThanOrEqual(0);
 	});

@@ -24,8 +24,10 @@ export const alignItemWithTriggerFallbackPositioning = {
 };
 
 /** Neutralizes Ark popper transforms on the positioner while aligned. */
+// Relative, not static: the positioner keeps the `z-index` zag copies onto it (static ignores it),
+// so an unportaled aligned popup still stacks above later positioned content.
 export const alignItemWithTriggerPositionerReset: Record<string, string> = {
-	position: "static",
+	position: "relative",
 	transform: "none",
 	top: "auto",
 	left: "auto",

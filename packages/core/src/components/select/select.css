@@ -63,7 +63,7 @@
 		}
 
 		&:has([data-align-item-with-trigger-active]) {
-			position: static !important;
+			position: relative !important;
 			transform: none !important;
 			top: auto !important;
 			left: auto !important;
