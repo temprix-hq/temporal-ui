@@ -211,6 +211,29 @@ export function computeAlignItemWithTrigger(
 	};
 }
 
+/**
+ * Gives the positioner of an alignable select the content's z-index.
+ *
+ * Zag isolates the positioner and copies its first child's computed z-index onto it once per open. For an
+ * alignable select that child is the wrapper around the content, which can still be at `auto` when Zag reads
+ * it, leaving the positioner at `z-index: auto` so later positioned content (sticky table headers, for one)
+ * paints over the popup and takes its hovers. Run this whenever the select opens or switches placement.
+ */
+export function syncAlignWrapperZIndex(wrapperEl: HTMLElement): void {
+	const contentEl = wrapperEl.firstElementChild;
+	const positionerEl = wrapperEl.parentElement;
+	if (!contentEl || !positionerEl) {
+		return;
+	}
+	const zIndex = getComputedStyle(contentEl).zIndex;
+	if (zIndex === "auto") {
+		return;
+	}
+	wrapperEl.style.zIndex = zIndex;
+	positionerEl.style.setProperty("--z-index", zIndex);
+	positionerEl.style.setProperty("z-index", "var(--z-index)");
+}
+
 export function querySelectedItemEl(contentEl: HTMLElement): HTMLElement | null {
 	return contentEl.querySelector('[data-part="item"][data-state="checked"]');
 }

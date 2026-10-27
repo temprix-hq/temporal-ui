@@ -1,7 +1,10 @@
 import { Select as ArkSelect, useSelectContext } from "@ark-ui/solid/select";
-import type { SelectItem as CoreSelectItem } from "@temporal-ui/core/select";
+import {
+	syncAlignWrapperZIndex,
+	type SelectItem as CoreSelectItem,
+} from "@temporal-ui/core/select";
 import { CheckIcon } from "lucide-solid";
-import { createEffect, For, mergeProps, Show, type JSX } from "solid-js";
+import { createEffect, createSignal, For, mergeProps, Show, type JSX } from "solid-js";
 import { useAlignItemWithTrigger } from "./use-align-item-with-trigger";
 
 export type SelectItem<D = unknown> = CoreSelectItem<D, JSX.Element>;
@@ -48,11 +51,14 @@ export function SelectContent(_props: SelectContentProps) {
 		}),
 	);
 
-	let wrapperEl: HTMLDivElement | undefined;
+	// A signal rather than `let` + `ref={el}`: the JSX is preserved in the build, so the bundler never sees
+	// the ref write, treats the variable as always undefined and drops this effect's body.
+	const [wrapperEl, setWrapperEl] = createSignal<HTMLDivElement>();
 	createEffect(() => {
-		const content = wrapperEl?.firstElementChild;
-		if (shouldAlign() && !showAligned() && wrapperEl && content) {
-			wrapperEl.style.zIndex = getComputedStyle(content).zIndex;
+		showAligned();
+		const wrapper = wrapperEl();
+		if (shouldAlign() && context().open && wrapper) {
+			syncAlignWrapperZIndex(wrapper);
 		}
 	});
 
@@ -84,7 +90,7 @@ export function SelectContent(_props: SelectContentProps) {
 				}
 			>
 				<div
-					ref={wrapperEl}
+					ref={setWrapperEl}
 					data-align-item-with-trigger-active={showAligned() ? "" : undefined}
 					style={showAligned() ? alignedStyles()?.popup : idleWrapperStyle}
 				>

@@ -1,5 +1,8 @@
 import { Select as ArkSelect, useSelectContext } from "@ark-ui/react/select";
-import type { SelectItem as CoreSelectItem } from "@temporal-ui/core/select";
+import {
+	syncAlignWrapperZIndex,
+	type SelectItem as CoreSelectItem,
+} from "@temporal-ui/core/select";
 import { CheckIcon } from "lucide-react";
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { useAlignItemWithTrigger } from "./use-align-item-with-trigger";
@@ -58,12 +61,10 @@ export function SelectContent(props: SelectContentProps) {
 
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	useLayoutEffect(() => {
-		const wrapper = wrapperRef.current;
-		const content = wrapper?.firstElementChild;
-		if (shouldAlign && !showAligned && wrapper && content) {
-			wrapper.style.zIndex = getComputedStyle(content).zIndex;
+		if (shouldAlign && context.open && wrapperRef.current) {
+			syncAlignWrapperZIndex(wrapperRef.current);
 		}
-	}, [shouldAlign, showAligned]);
+	}, [shouldAlign, showAligned, context.open]);
 
 	const contentStyle = showAligned ? alignedStyles?.content : { maxHeight: `${maxHeight}px` };
 
@@ -78,8 +79,8 @@ export function SelectContent(props: SelectContentProps) {
 		>
 			{/* Zag tracks the content element for outside presses and focus, so Select.Content must never
 			    remount while the select is open. A select that can align therefore always renders the
-			    wrapper and only changes its styles. Zag also copies the positioner's first child's computed
-			    z-index onto `--z-index`, so the idle wrapper takes over the content's computed z-index. */}
+			    wrapper and only changes its styles. The wrapper hides the content from Zag's z-index copy, so
+			    syncAlignWrapperZIndex hands the content's z-index to the wrapper and the positioner. */}
 			{shouldAlign ? (
 				<div
 					ref={wrapperRef}
