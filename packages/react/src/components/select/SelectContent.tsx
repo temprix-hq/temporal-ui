@@ -49,15 +49,13 @@ export function SelectContent(props: SelectContentProps) {
 		selectIds,
 	} = props;
 	const context = useSelectContext();
-	const { alignedStyles, isAlignPending, showAligned, shouldAlign } = useAlignItemWithTrigger(
-		context,
-		{
+	const { alignedStyles, concealedStyles, isAlignPending, showAligned, shouldAlign } =
+		useAlignItemWithTrigger(context, {
 			alignItemWithTrigger,
 			alignItemWithTriggerMinHeight,
 			openedWithTouch,
 			selectIds,
-		},
-	);
+		});
 
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	useLayoutEffect(() => {
@@ -66,7 +64,8 @@ export function SelectContent(props: SelectContentProps) {
 		}
 	}, [shouldAlign, showAligned, context.open]);
 
-	const contentStyle = showAligned ? alignedStyles?.content : { maxHeight: `${maxHeight}px` };
+	const heldStyles = showAligned ? alignedStyles : concealedStyles;
+	const contentStyle = heldStyles ? heldStyles.content : { maxHeight: `${maxHeight}px` };
 
 	return (
 		<ArkSelect.Positioner
@@ -75,7 +74,7 @@ export function SelectContent(props: SelectContentProps) {
 			data-testid={tid("--positioner")}
 			data-align-item-with-trigger={shouldAlign ? "" : undefined}
 			data-align-item-with-trigger-pending={isAlignPending ? "" : undefined}
-			style={showAligned ? alignedStyles?.positioner : undefined}
+			style={heldStyles?.positioner}
 		>
 			{/* Zag tracks the content element for outside presses and focus, so Select.Content must never
 			    remount while the select is open. A select that can align therefore always renders the
@@ -84,8 +83,8 @@ export function SelectContent(props: SelectContentProps) {
 			{shouldAlign ? (
 				<div
 					ref={wrapperRef}
-					data-align-item-with-trigger-active={showAligned ? "" : undefined}
-					style={showAligned ? alignedStyles?.popup : idleWrapperStyle}
+					data-align-item-with-trigger-active={heldStyles ? "" : undefined}
+					style={heldStyles ? heldStyles.popup : idleWrapperStyle}
 				>
 					<SelectContentBody
 						tid={tid}

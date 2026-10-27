@@ -4,6 +4,7 @@ import {
 	alignItemWithTriggerFallbackPositioning,
 	areAlignItemWithTriggerStylesEqual,
 	computeAlignItemWithTrigger,
+	concealAlignItemWithTriggerStyles,
 	isScrollInsideContent,
 	querySelectedItemEl,
 	readAlignItemWithTriggerAnchor,
@@ -146,7 +147,14 @@ export function useAlignItemWithTrigger(
 	);
 
 	const isAlignPending = shouldAlign && context.open && readyEpoch !== alignEpoch;
-	const showAligned = !!alignedStyles && context.open && !isAlignPending;
+	const placed = !!alignedStyles && !isAlignPending;
+	const showAligned = placed && context.open;
+	// Zag leaves the list mounted for a frame after close and restores the popper
+	// placement. Keep the aligned box and hide it so that frame does not jump.
+	const concealedStyles =
+		placed && !context.open && alignedStyles
+			? concealAlignItemWithTriggerStyles(alignedStyles)
+			: undefined;
 
 	// The aligned popup is position:fixed, so it would stay on screen while the
 	// select moves. Follow the trigger for any scroll that is not the list itself.
@@ -205,5 +213,5 @@ export function useAlignItemWithTrigger(
 		};
 	}, [showAligned, props.selectIds]);
 
-	return { alignedStyles, isAlignPending, showAligned, shouldAlign };
+	return { alignedStyles, concealedStyles, isAlignPending, showAligned, shouldAlign };
 }

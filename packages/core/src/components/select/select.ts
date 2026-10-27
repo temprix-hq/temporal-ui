@@ -18,7 +18,7 @@ export interface SelectProps<T = unknown> extends FieldProps<T> {
 	/**
 	 * Overlap the dropdown on the trigger so the selected item covers the select and
 	 * its text lines up with the value. The popup stays anchored to the select while
-	 * the page scrolls.
+	 * the page scrolls, and it disappears in place when it closes.
 	 */
 	alignItemWithTrigger?: boolean;
 	/** Minimum dropdown height required before falling back to standard placement. */

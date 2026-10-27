@@ -292,6 +292,30 @@ export function shiftAlignedPopupWithTrigger(
 	};
 }
 
+/**
+ * Hides an aligned popup in place. Closing must not drop these styles: Zag keeps the
+ * list mounted for a frame and would otherwise park it under the trigger.
+ */
+export function concealAlignItemWithTriggerStyles(
+	styles: AlignItemWithTriggerStyles,
+	kebab = false,
+): AlignItemWithTriggerStyles {
+	const popup: Record<string, string> = {
+		...styles.popup,
+		visibility: "hidden",
+		animation: "none",
+		transition: "none",
+	};
+	if (kebab) {
+		delete popup.pointerEvents;
+		popup["pointer-events"] = "none";
+	} else {
+		delete popup["pointer-events"];
+		popup.pointerEvents = "none";
+	}
+	return { ...styles, popup };
+}
+
 /** True when the scroll came from the list itself, which must not move the popup. */
 export function isScrollInsideContent(
 	target: EventTarget | null,

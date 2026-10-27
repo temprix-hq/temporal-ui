@@ -62,6 +62,16 @@
 			pointer-events: none;
 		}
 
+		/* Zag keeps the list mounted for a frame after close and would slide it back
+		   under the trigger. It has to disappear where it is, with no exit motion. */
+		&:has([data-part="content"][data-state="closed"]) {
+			[data-scope="select"][data-part="content"] {
+				animation: none !important;
+				transition: none !important;
+				visibility: hidden !important;
+			}
+		}
+
 		&:has([data-align-item-with-trigger-active]) {
 			position: relative !important;
 			transform: none !important;

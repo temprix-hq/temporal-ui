@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
 	ALIGN_ITEM_WITH_TRIGGER_EDGE_THRESHOLD,
 	computeAlignItemWithTrigger,
+	concealAlignItemWithTriggerStyles,
 	isScrollInsideContent,
 	querySelectedItemEl,
 	readAlignItemWithTriggerAnchor,
@@ -344,6 +345,36 @@ describe("computeAlignItemWithTrigger", () => {
 		contentEl.append(unchecked, highlighted, checked);
 
 		expect(querySelectedItemEl(contentEl)).toBe(checked);
+	});
+
+	describe("concealAlignItemWithTriggerStyles", () => {
+		const styles: AlignItemWithTriggerStyles = {
+			positioner: { position: "relative", transform: "none" },
+			popup: { position: "fixed", top: "40px", left: "12px" },
+			content: { maxHeight: "100%" },
+			scrollTop: 3,
+		};
+
+		it("hides the popup without moving it", () => {
+			const concealed = concealAlignItemWithTriggerStyles(styles);
+
+			expect(concealed.popup.position).toBe("fixed");
+			expect(concealed.popup.top).toBe("40px");
+			expect(concealed.popup.left).toBe("12px");
+			expect(concealed.popup.visibility).toBe("hidden");
+			expect(concealed.popup.pointerEvents).toBe("none");
+			expect(concealed.popup.animation).toBe("none");
+			expect(concealed.popup.transition).toBe("none");
+			expect(concealed.positioner).toEqual(styles.positioner);
+			expect(concealed.scrollTop).toBe(3);
+		});
+
+		it("writes a kebab-case pointer-events for Solid", () => {
+			const concealed = concealAlignItemWithTriggerStyles(styles, true);
+
+			expect(concealed.popup["pointer-events"]).toBe("none");
+			expect(concealed.popup.pointerEvents).toBeUndefined();
+		});
 	});
 
 	describe("shiftAlignedPopupWithTrigger", () => {

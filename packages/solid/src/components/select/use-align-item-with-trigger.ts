@@ -4,6 +4,7 @@ import {
 	alignItemWithTriggerFallbackPositioning,
 	areAlignItemWithTriggerStylesEqual,
 	computeAlignItemWithTrigger,
+	concealAlignItemWithTriggerStyles,
 	isScrollInsideContent,
 	querySelectedItemEl,
 	readAlignItemWithTriggerAnchor,
@@ -69,6 +70,15 @@ export function useAlignItemWithTrigger(
 	);
 
 	const showAligned = createMemo(() => !!alignedStyles() && isOpen() && !isAlignPending());
+	// Zag leaves the list mounted for a frame after close and restores the popper
+	// placement. Keep the aligned box and hide it so that frame does not jump.
+	const concealedStyles = createMemo(() => {
+		const styles = alignedStyles();
+		if (!styles || isOpen() || isAlignPending()) {
+			return undefined;
+		}
+		return concealAlignItemWithTriggerStyles(styles, true);
+	});
 
 	createEffect(() => {
 		if (!isOpen()) {
@@ -238,5 +248,5 @@ export function useAlignItemWithTrigger(
 		});
 	});
 
-	return { alignedStyles, isAlignPending, showAligned, shouldAlign };
+	return { alignedStyles, concealedStyles, isAlignPending, showAligned, shouldAlign };
 }
