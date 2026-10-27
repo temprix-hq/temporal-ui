@@ -1,5 +1,11 @@
 # @temporal-ui/core
 
+## 1.1.5
+
+### Patch Changes
+
+- [#326](https://github.com/temprix-hq/temporal-ui/pull/326) [`c55d989`](https://github.com/temprix-hq/temporal-ui/commit/c55d989da5b8a27bb40cb7c4ef01997aa201a1c1) Thanks [@dryu](https://github.com/dryu)! - Fix `Select` with `alignItemWithTrigger` so the popup stays anchored to the select while the page scrolls, and so the open popup covers the select. The select's top border no longer shows above the popup, and the corners line up. Closing the popup no longer slides it back under the select; it disappears in place.
+
 ## 1.1.4
 
 ### Patch Changes
