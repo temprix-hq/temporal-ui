@@ -15,7 +15,11 @@ export interface SelectProps<T = unknown> extends FieldProps<T> {
 	maxDropdownHeight?: number;
 	deselectable?: boolean;
 	placeholder?: string;
-	/** Overlap the dropdown on the trigger so selected item text aligns with the value text. */
+	/**
+	 * Overlap the dropdown on the trigger so the selected item covers the select and
+	 * its text lines up with the value. The popup stays anchored to the select while
+	 * the page scrolls.
+	 */
 	alignItemWithTrigger?: boolean;
 	/** Minimum dropdown height required before falling back to standard placement. */
 	alignItemWithTriggerMinHeight?: number;

@@ -4,7 +4,11 @@ import {
 	alignItemWithTriggerFallbackPositioning,
 	areAlignItemWithTriggerStylesEqual,
 	computeAlignItemWithTrigger,
+	isScrollInsideContent,
 	querySelectedItemEl,
+	readAlignItemWithTriggerAnchor,
+	shiftAlignedPopupWithTrigger,
+	type AlignItemWithTriggerAnchor,
 	type AlignItemWithTriggerStyles,
 } from "@temporal-ui/core/select";
 import { createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js";
@@ -47,6 +51,8 @@ export function useAlignItemWithTrigger(
 	const [readyEpoch, setReadyEpoch] = createSignal(0);
 	const isOpen = createMemo(() => context().open);
 	let sessionCounter = 0;
+	let latestStyles: AlignItemWithTriggerStyles | undefined;
+	let anchor: AlignItemWithTriggerAnchor | undefined;
 
 	const shouldAlign = createMemo(() => {
 		const currentProps = props();
@@ -171,6 +177,65 @@ export function useAlignItemWithTrigger(
 		if (contentEl) {
 			contentEl.scrollTop = styles.scrollTop;
 		}
+	});
+
+	createEffect(() => {
+		latestStyles = alignedStyles();
+	});
+
+	// The aligned popup is position:fixed, so it would stay on screen while the
+	// select moves. Follow the trigger for any scroll that is not the list itself.
+	createEffect(() => {
+		if (!showAligned()) {
+			anchor = undefined;
+			return;
+		}
+
+		const ids = untrack(() => props().selectIds);
+		if (!ids) {
+			return;
+		}
+
+		const triggerEl = document.getElementById(ids.trigger);
+		const popupEl = document
+			.getElementById(ids.positioner)
+			?.querySelector<HTMLElement>("[data-align-item-with-trigger-active]");
+		if (!triggerEl || !popupEl) {
+			return;
+		}
+
+		anchor = readAlignItemWithTriggerAnchor(triggerEl, popupEl);
+
+		const onScroll = (event: Event) => {
+			const contentEl = document.getElementById(ids.content);
+			const current = latestStyles;
+			if (!anchor || !current || isScrollInsideContent(event.target, contentEl)) {
+				return;
+			}
+
+			const triggerRect = triggerEl.getBoundingClientRect();
+			const shifted = shiftAlignedPopupWithTrigger(
+				current,
+				anchor,
+				triggerRect.top,
+				triggerRect.left,
+				true,
+			);
+			if (!shifted) {
+				return;
+			}
+
+			anchor = shifted.anchor;
+			latestStyles = shifted.styles;
+			setAlignedStyles(shifted.styles);
+		};
+
+		window.addEventListener("scroll", onScroll, true);
+		window.visualViewport?.addEventListener("scroll", onScroll);
+		onCleanup(() => {
+			window.removeEventListener("scroll", onScroll, true);
+			window.visualViewport?.removeEventListener("scroll", onScroll);
+		});
 	});
 
 	return { alignedStyles, isAlignPending, showAligned, shouldAlign };

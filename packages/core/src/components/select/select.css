@@ -113,6 +113,12 @@
 			[data-part="item"] {
 				/* Reserve a left gutter for the check indicator (macOS-style). */
 				@apply pl-8 pr-3;
+				/*
+				 * The control is `--reference-height` including its 1px borders. A centered
+				 * row that is 2px shorter sits 1px in, so the popup's own 1px border lands
+				 * on the select border and the corners coincide.
+				 */
+				height: calc(var(--reference-height) - 2px);
 			}
 
 			/* Items must not wrap: the popup width derives from the widest item. */

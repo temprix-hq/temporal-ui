@@ -5,8 +5,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
 	ALIGN_ITEM_WITH_TRIGGER_EDGE_THRESHOLD,
 	computeAlignItemWithTrigger,
+	isScrollInsideContent,
 	querySelectedItemEl,
+	readAlignItemWithTriggerAnchor,
+	shiftAlignedPopupWithTrigger,
 	syncAlignWrapperZIndex,
+	type AlignItemWithTriggerStyles,
 } from "./align-item-with-trigger";
 
 function mockRect(top: number, height = 36, left = 0, width = 200): DOMRect {
@@ -340,6 +344,83 @@ describe("computeAlignItemWithTrigger", () => {
 		contentEl.append(unchecked, highlighted, checked);
 
 		expect(querySelectedItemEl(contentEl)).toBe(checked);
+	});
+
+	describe("shiftAlignedPopupWithTrigger", () => {
+		const styles: AlignItemWithTriggerStyles = {
+			positioner: { position: "relative" },
+			popup: {
+				position: "fixed",
+				top: "10px",
+				left: "20px",
+				bottom: "0px",
+				marginTop: "10px",
+				marginBottom: "10px",
+			},
+			content: { maxHeight: "100%" },
+			scrollTop: 4,
+		};
+		const anchor = { triggerTop: 100, triggerLeft: 50, popupTop: 80, popupLeft: 40 };
+
+		it("moves the popup border box with the trigger and clears the viewport margins", () => {
+			const shifted = shiftAlignedPopupWithTrigger(styles, anchor, 60, 55);
+
+			expect(shifted).toBeDefined();
+			if (!shifted) {
+				return;
+			}
+
+			expect(shifted.styles.popup.top).toBe("40px");
+			expect(shifted.styles.popup.left).toBe("45px");
+			expect(shifted.styles.popup.bottom).toBe("auto");
+			expect(shifted.styles.popup.marginTop).toBe("0px");
+			expect(shifted.styles.popup.marginBottom).toBe("0px");
+			expect(shifted.styles.scrollTop).toBe(4);
+			expect(shifted.anchor).toEqual({
+				triggerTop: 60,
+				triggerLeft: 55,
+				popupTop: 40,
+				popupLeft: 45,
+			});
+		});
+
+		it("returns undefined when the trigger has not moved", () => {
+			expect(shiftAlignedPopupWithTrigger(styles, anchor, 100, 50)).toBeUndefined();
+		});
+
+		it("reads the trigger and popup border boxes", () => {
+			const triggerEl = document.createElement("button");
+			const popupEl = document.createElement("div");
+			vi.spyOn(triggerEl, "getBoundingClientRect").mockReturnValue(mockRect(120, 36, 40, 250));
+			vi.spyOn(popupEl, "getBoundingClientRect").mockReturnValue(mockRect(119, 98, 20, 270));
+
+			expect(readAlignItemWithTriggerAnchor(triggerEl, popupEl)).toEqual({
+				triggerTop: 120,
+				triggerLeft: 40,
+				popupTop: 119,
+				popupLeft: 20,
+			});
+		});
+
+		it("writes kebab-case margins for Solid", () => {
+			const shifted = shiftAlignedPopupWithTrigger(styles, anchor, 90, 50, true);
+
+			expect(shifted?.styles.popup["margin-top"]).toBe("0px");
+			expect(shifted?.styles.popup["margin-bottom"]).toBe("0px");
+			expect(shifted?.styles.popup.marginTop).toBeUndefined();
+		});
+	});
+
+	it("ignores scroll events that come from the list", () => {
+		const contentEl = document.createElement("div");
+		const item = document.createElement("div");
+		contentEl.appendChild(item);
+		const outside = document.createElement("div");
+
+		expect(isScrollInsideContent(contentEl, contentEl)).toBe(true);
+		expect(isScrollInsideContent(item, contentEl)).toBe(true);
+		expect(isScrollInsideContent(outside, contentEl)).toBe(false);
+		expect(isScrollInsideContent(document, contentEl)).toBe(false);
 	});
 
 	describe("syncAlignWrapperZIndex", () => {
