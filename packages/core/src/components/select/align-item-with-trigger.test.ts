@@ -6,6 +6,7 @@ import {
 	ALIGN_ITEM_WITH_TRIGGER_EDGE_THRESHOLD,
 	computeAlignItemWithTrigger,
 	querySelectedItemEl,
+	syncAlignWrapperZIndex,
 } from "./align-item-with-trigger";
 
 function mockRect(top: number, height = 36, left = 0, width = 200): DOMRect {
@@ -339,5 +340,36 @@ describe("computeAlignItemWithTrigger", () => {
 		contentEl.append(unchecked, highlighted, checked);
 
 		expect(querySelectedItemEl(contentEl)).toBe(checked);
+	});
+
+	describe("syncAlignWrapperZIndex", () => {
+		function createWrapperFixture(contentZIndex: string) {
+			const positionerEl = document.createElement("div");
+			const wrapperEl = document.createElement("div");
+			const contentEl = document.createElement("div");
+			wrapperEl.appendChild(contentEl);
+			positionerEl.appendChild(wrapperEl);
+			mockComputedStyle(contentEl, { zIndex: contentZIndex });
+			return { positionerEl, wrapperEl };
+		}
+
+		it("gives the wrapper and the positioner the content z-index", () => {
+			const { positionerEl, wrapperEl } = createWrapperFixture("200");
+
+			syncAlignWrapperZIndex(wrapperEl);
+
+			expect(wrapperEl.style.zIndex).toBe("200");
+			expect(positionerEl.style.getPropertyValue("--z-index")).toBe("200");
+			expect(positionerEl.style.getPropertyValue("z-index")).toBe("var(--z-index)");
+		});
+
+		it("leaves both alone when the content z-index is auto", () => {
+			const { positionerEl, wrapperEl } = createWrapperFixture("auto");
+
+			syncAlignWrapperZIndex(wrapperEl);
+
+			expect(wrapperEl.style.zIndex).toBe("");
+			expect(positionerEl.style.getPropertyValue("z-index")).toBe("");
+		});
 	});
 });
