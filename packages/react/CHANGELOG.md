@@ -1,5 +1,13 @@
 # @temporal-ui/react
 
+## 1.1.4
+
+### Patch Changes
+
+- [#323](https://github.com/temprix-hq/temporal-ui/pull/323) [`1d80d6a`](https://github.com/temprix-hq/temporal-ui/commit/1d80d6aa6502a7b574586138c9d578fafb77000e) Thanks [@dryu](https://github.com/dryu)! - Select: keep the `alignItemWithTrigger` popup above positioned page content. The positioner now always takes the content's z-index, so sticky headers and other positioned elements no longer paint over the popup or take its hover. In Solid the built package had silently dropped the z-index copy, because the wrapper ref was a plain `let` that the bundler folded to undefined.
+- Updated dependencies [[`1d80d6a`](https://github.com/temprix-hq/temporal-ui/commit/1d80d6aa6502a7b574586138c9d578fafb77000e)]:
+  - @temporal-ui/core@1.1.4
+
 ## 1.1.3
 
 ### Patch Changes
