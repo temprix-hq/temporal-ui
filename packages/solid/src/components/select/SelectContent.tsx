@@ -41,15 +41,13 @@ const idleWrapperStyle = { display: "contents" };
 export function SelectContent(_props: SelectContentProps) {
 	const props = mergeProps({ maxHeight: 500 }, _props);
 	const context = useSelectContext();
-	const { alignedStyles, isAlignPending, showAligned, shouldAlign } = useAlignItemWithTrigger(
-		context,
-		() => ({
+	const { alignedStyles, concealedStyles, isAlignPending, showAligned, shouldAlign } =
+		useAlignItemWithTrigger(context, () => ({
 			alignItemWithTrigger: props.alignItemWithTrigger,
 			alignItemWithTriggerMinHeight: props.alignItemWithTriggerMinHeight,
 			openedWithTouch: props.openedWithTouch,
 			selectIds: props.selectIds,
-		}),
-	);
+		}));
 
 	// A signal rather than `let` + `ref={el}`: the JSX is preserved in the build, so the bundler never sees
 	// the ref write, treats the variable as always undefined and drops this effect's body.
@@ -62,8 +60,8 @@ export function SelectContent(_props: SelectContentProps) {
 		}
 	});
 
-	const contentStyle = () =>
-		showAligned() ? alignedStyles()?.content : { "max-height": `${props.maxHeight}px` };
+	const heldStyles = () => (showAligned() ? alignedStyles() : concealedStyles());
+	const contentStyle = () => heldStyles()?.content ?? { "max-height": `${props.maxHeight}px` };
 
 	return (
 		<ArkSelect.Positioner
@@ -72,7 +70,7 @@ export function SelectContent(_props: SelectContentProps) {
 			data-testid={props.tid("--positioner")}
 			data-align-item-with-trigger={shouldAlign() ? "" : undefined}
 			data-align-item-with-trigger-pending={isAlignPending() ? "" : undefined}
-			style={showAligned() ? alignedStyles()?.positioner : undefined}
+			style={heldStyles()?.positioner}
 		>
 			{/* Zag tracks the content element for outside presses and focus, so Select.Content must never
 			    remount while the select is open. A select that can align therefore always renders the
@@ -91,8 +89,8 @@ export function SelectContent(_props: SelectContentProps) {
 			>
 				<div
 					ref={setWrapperEl}
-					data-align-item-with-trigger-active={showAligned() ? "" : undefined}
-					style={showAligned() ? alignedStyles()?.popup : idleWrapperStyle}
+					data-align-item-with-trigger-active={heldStyles() ? "" : undefined}
+					style={heldStyles()?.popup ?? idleWrapperStyle}
 				>
 					<SelectContentBody
 						tid={props.tid}

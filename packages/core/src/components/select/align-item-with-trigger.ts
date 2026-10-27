@@ -238,6 +238,106 @@ export function querySelectedItemEl(contentEl: HTMLElement): HTMLElement | null 
 	return contentEl.querySelector('[data-part="item"][data-state="checked"]');
 }
 
+export interface AlignItemWithTriggerAnchor {
+	triggerTop: number;
+	triggerLeft: number;
+	popupTop: number;
+	popupLeft: number;
+}
+
+/**
+ * Moves an aligned popup by the same amount the trigger moved, so a fixed popup
+ * stays on the select while the page or a parent scrolls.
+ *
+ * `top` / `left` are the popup border box. Margins are cleared because the
+ * original `top` insets the margin edge, and keeping them would shift the box.
+ */
+export function shiftAlignedPopupWithTrigger(
+	styles: AlignItemWithTriggerStyles,
+	anchor: AlignItemWithTriggerAnchor,
+	triggerTop: number,
+	triggerLeft: number,
+	kebab = false,
+): { styles: AlignItemWithTriggerStyles; anchor: AlignItemWithTriggerAnchor } | undefined {
+	const dy = triggerTop - anchor.triggerTop;
+	const dx = triggerLeft - anchor.triggerLeft;
+	if (dy === 0 && dx === 0) {
+		return undefined;
+	}
+
+	const popupTop = anchor.popupTop + dy;
+	const popupLeft = anchor.popupLeft + dx;
+	const popup: Record<string, string> = {
+		...styles.popup,
+		top: `${popupTop}px`,
+		left: `${popupLeft}px`,
+		bottom: "auto",
+		right: "auto",
+	};
+	if (kebab) {
+		delete popup.marginTop;
+		delete popup.marginBottom;
+		popup["margin-top"] = "0px";
+		popup["margin-bottom"] = "0px";
+	} else {
+		delete popup["margin-top"];
+		delete popup["margin-bottom"];
+		popup.marginTop = "0px";
+		popup.marginBottom = "0px";
+	}
+
+	return {
+		styles: { ...styles, popup },
+		anchor: { triggerTop, triggerLeft, popupTop, popupLeft },
+	};
+}
+
+/**
+ * Hides an aligned popup in place. Closing must not drop these styles: Zag keeps the
+ * list mounted for a frame and would otherwise park it under the trigger.
+ */
+export function concealAlignItemWithTriggerStyles(
+	styles: AlignItemWithTriggerStyles,
+	kebab = false,
+): AlignItemWithTriggerStyles {
+	const popup: Record<string, string> = {
+		...styles.popup,
+		visibility: "hidden",
+		animation: "none",
+		transition: "none",
+	};
+	if (kebab) {
+		delete popup.pointerEvents;
+		popup["pointer-events"] = "none";
+	} else {
+		delete popup["pointer-events"];
+		popup.pointerEvents = "none";
+	}
+	return { ...styles, popup };
+}
+
+/** True when the scroll came from the list itself, which must not move the popup. */
+export function isScrollInsideContent(
+	target: EventTarget | null,
+	contentEl: HTMLElement | null,
+): boolean {
+	return !!contentEl && target instanceof Node && contentEl.contains(target);
+}
+
+export function readAlignItemWithTriggerAnchor(
+	triggerEl: HTMLElement,
+	popupEl: HTMLElement,
+): AlignItemWithTriggerAnchor {
+	const triggerRect = triggerEl.getBoundingClientRect();
+	const popupRect = popupEl.getBoundingClientRect();
+	return {
+		triggerTop: triggerRect.top,
+		triggerLeft: triggerRect.left,
+		popupTop: popupRect.top,
+		popupLeft: popupRect.left,
+	};
+}
+
 export function areAlignItemWithTriggerStylesEqual(
 	current: AlignItemWithTriggerStyles | undefined,
 	next: AlignItemWithTriggerStyles,
